@@ -1,5 +1,5 @@
 export interface Edge {
-    from: number;
-    to: number;
-    weight?: number;
+  from: number;
+  to: number;
+  weight?: number;
 }

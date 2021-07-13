@@ -5,14 +5,13 @@ import { Grommet } from 'grommet';
 import BFS from './bfs/bfs';
 // import reportWebVitals from './reportWebVitals';
 
-
 ReactDOM.render(
   <React.StrictMode>
     <Grommet plain>
       <BFS />
     </Grommet>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById('root'),
 );
 
 // If you want to start measuring performance in your app, pass a function
