@@ -6,39 +6,12 @@ import { GraphSourceProps } from './';
 
 const GraphSource = (props: GraphSourceProps): JSX.Element => {
   const parentRef = props.containerRef;
-  const defaultGraph = props.default;
-  const cytoTransform = props.transform;
-  const validate = props.validate;
+  const source = props.source;
+  const errors = props.errors;
+  const handleSourceChange = props.handleSourceChange;
+  const handleCytoChange = props.handleCytoChange;
 
-  const [text, setText] = useState(JSON.stringify(defaultGraph, undefined, 2));
-  const [errors, setErrors] = useState<
-    ErrorObject<string, Record<string, any>, unknown>[]
-  >([]);
-  const [cytoData, setCytoData] = useState<
-    cytoscape.ElementDefinition[] | undefined
-  >(cytoTransform(defaultGraph));
-
-  const parseSource = (sourceText: string) => {
-    try {
-      const sourceJson = JSON.parse(sourceText);
-      const errs = validate(sourceJson, GraphSchema);
-      if (errs) {
-        setErrors(errs);
-      } else {
-        setCytoData(cytoTransform(sourceJson));
-        setErrors([]);
-      }
-      const prettyText = JSON.stringify(sourceJson, undefined, 2);
-      return prettyText;
-    } catch (err) {
-      setErrors([err]);
-      return sourceText;
-    }
-  };
-
-  if (parentRef) {
-    useCytoscape(cytoData, parentRef);
-  }
+  handleCytoChange(parentRef);
 
   return (
     <div style={{ width: '100%' }}>
@@ -51,9 +24,9 @@ const GraphSource = (props: GraphSourceProps): JSX.Element => {
           boxSizing: 'border-box',
           resize: 'none',
         }}
-        value={text}
+        value={source}
         className={errors.length > 0 ? 'error' : 'good'}
-        onChange={(e) => setText(parseSource(e.target.value))}
+        onChange={(e) => handleSourceChange(e.target.value)}
       />
       <div style={{ height: '20%' }}>
         {errors &&

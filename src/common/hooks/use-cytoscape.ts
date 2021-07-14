@@ -1,4 +1,4 @@
-import { RefObject, useEffect } from 'react';
+import React, { RefObject, useEffect, Dispatch, SetStateAction } from 'react';
 import cytoscape, { CytoscapeOptions, LayoutOptions } from 'cytoscape';
 
 export const useCytoscape = (
