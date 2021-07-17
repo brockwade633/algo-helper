@@ -1,12 +1,7 @@
-import React, { useRef, useState, useEffect, RefObject } from 'react';
+import React, { useRef, useState, RefObject } from 'react';
 import SplitPane from 'react-split-pane';
 import { GraphAnimation } from '../common';
-import {
-  BFSWrapper,
-  cytoBFSTransform,
-  defaultBFS,
-  defaultBFSCytoCore,
-} from './';
+import { BFSWrapper, cytoBFSTransform, defaultBFS, cytoWrapper } from './';
 import { GraphSource } from '../common';
 import { validateGraph } from '../common';
 import { ErrorObject } from 'ajv';
@@ -16,8 +11,6 @@ import { useCytoscape } from '../common';
 
 const BFS = (): JSX.Element => {
   const currRef = useRef<HTMLDivElement>(null);
-  const [isGraphAnimationRendered, setIsGraphAnimationRendered] =
-    useState(false);
 
   const [text, setText] = useState(JSON.stringify(defaultBFS, undefined, 2));
   const [errors, setErrors] = useState<
@@ -45,16 +38,6 @@ const BFS = (): JSX.Element => {
     }
   };
 
-  // How are we going to initialize a cyto core object that we can pass to splitpane onChange?
-  //
-  //   const defaultCore = (check: boolean) => {
-  //     if (check) {
-  //         return defaultBFSCytoCore(currRef, cytoData);
-  //     }
-  //   };
-
-  //   const [cytoCore, setCytoCore] = useState(null);
-
   const handleBFSGraphSourceChange = (source: string) => {
     setText(parseSource(source));
   };
@@ -69,16 +52,21 @@ const BFS = (): JSX.Element => {
     <BFSWrapper>
       <SplitPane
         split="vertical"
-        defaultSize="70%"
+        defaultSize="60%"
         onChange={() => {
-          console.log();
+          cytoWrapper(cytoData, currRef);
         }}
       >
-        <SplitPane split="horizontal" defaultSize="50%">
+        <SplitPane
+          split="horizontal"
+          defaultSize="50%"
+          onChange={() => {
+            cytoWrapper(cytoData, currRef);
+          }}
+        >
           <GraphAnimation
             {...{
               containerRef: currRef,
-              isRendered: setIsGraphAnimationRendered,
             }}
           />
           <GraphSource

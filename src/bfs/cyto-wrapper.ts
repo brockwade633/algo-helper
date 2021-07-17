@@ -1,11 +1,11 @@
-import { RefObject } from 'react';
-import cytoscape, { CytoscapeOptions } from 'cytoscape';
+import React, { RefObject } from 'react';
+import cytoscape, { CytoscapeOptions, LayoutOptions } from 'cytoscape';
 
-export const defaultBFSCytoCore = (
-  ref: RefObject<HTMLDivElement>,
+export const cytoWrapper = (
   data: cytoscape.ElementDefinition[] | undefined,
+  ref: RefObject<HTMLDivElement>,
 ) => {
-  if (ref) {
+  try {
     const config: CytoscapeOptions = {
       container: ref.current,
       style: [
@@ -27,13 +27,15 @@ export const defaultBFSCytoCore = (
         fit: true,
         padding: 50,
         //boundingBox: undefined,
-        animate: true,
-        animationDuration: 300,
-        animationEasing: undefined,
+        animate: false,
+        //animationDuration: 300,
+        //animationEasing: undefined,
         //transform: function (node: any, pos: any){ return pos; }
       },
+      headless: false,
     };
-    console.log(config);
     return cytoscape(config);
+  } catch (error) {
+    console.warn(error);
   }
 };
