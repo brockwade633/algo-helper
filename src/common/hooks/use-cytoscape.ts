@@ -1,5 +1,5 @@
-import React, { RefObject, useEffect, Dispatch, SetStateAction } from 'react';
-import cytoscape, { CytoscapeOptions, LayoutOptions } from 'cytoscape';
+import { RefObject, useEffect } from 'react';
+import cytoscape from 'cytoscape';
 import { cytoWrapper } from '../../bfs';
 
 export const useCytoscape = (

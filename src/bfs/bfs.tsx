@@ -1,5 +1,6 @@
 import React, { useRef, useState, RefObject } from 'react';
 import SplitPane from 'react-split-pane';
+import { Markdown } from 'grommet';
 import { GraphAnimation } from '../common';
 import { BFSWrapper, cytoBFSTransform, defaultBFS, cytoWrapper } from './';
 import { GraphSource } from '../common';
@@ -79,7 +80,7 @@ const BFS = (): JSX.Element => {
             }}
           />
         </SplitPane>
-        <div>HELLO WORLD</div>
+        <div>Breadth First Search</div>
       </SplitPane>
     </BFSWrapper>
   );

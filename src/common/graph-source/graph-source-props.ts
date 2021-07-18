@@ -1,5 +1,4 @@
 import { RefObject } from 'react';
-import { Graph } from '../models';
 import { ErrorObject } from 'ajv';
 
 export interface GraphSourceProps {
