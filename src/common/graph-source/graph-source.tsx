@@ -28,7 +28,7 @@ const GraphSource = (props: GraphSourceProps): JSX.Element => {
         </Box>
         <Box
           height="100%"
-          pad="xxsmall"
+          pad="small"
           round="small"
           border={{
             color: `${errors.length ? 'red' : 'green'}`,
