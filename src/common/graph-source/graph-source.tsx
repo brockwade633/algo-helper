@@ -1,7 +1,10 @@
 import React from 'react';
 import { Box, Text, TextArea } from 'grommet';
 import { StatusGood, StatusWarning, Code, Notes } from 'grommet-icons';
-import { GraphSourceProps } from './';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+//import { foundation } from 'react-syntax-highlighter/dist/esm/styles/hljs/';
+import { GraphSourceProps, GRAPHDEFINITION } from './';
 
 const GraphSource = (props: GraphSourceProps): JSX.Element => {
   const parentRef = props.containerRef;
@@ -14,7 +17,7 @@ const GraphSource = (props: GraphSourceProps): JSX.Element => {
 
   return (
     <div style={{ display: 'flex', width: '100%' }}>
-      <Box pad="small" height="100%" width="60%">
+      <Box pad="small" height="100%" width="50%">
         <Box>
           <Text size="small" margin="small" weight="bold">
             <div style={{ display: 'flex' }}>
@@ -52,12 +55,12 @@ const GraphSource = (props: GraphSourceProps): JSX.Element => {
             {errors.length ? (
               errors.map((err) =>
                 err.instancePath ? (
-                  <div style={{ display: 'flex' }}>
+                  <div key={errors.indexOf(err)} style={{ display: 'flex' }}>
                     <StatusWarning color="red" size="18px" />
                     &nbsp;{`Error: ${err.message} at ${err.instancePath}`}
                   </div>
                 ) : (
-                  <div style={{ display: 'flex' }}>
+                  <div key={errors.indexOf(err)} style={{ display: 'flex' }}>
                     <StatusWarning color="red" size="18px" />
                     &nbsp;{`Error: ${err.message}`}
                   </div>
@@ -72,7 +75,7 @@ const GraphSource = (props: GraphSourceProps): JSX.Element => {
           </Text>
         </Box>
       </Box>
-      <Box pad="small" height="100%" width="40%">
+      <Box pad="small" height="100%" width="50%">
         <Box>
           <Text size="small" margin="small" weight="bold">
             <div style={{ display: 'flex' }}>
@@ -81,8 +84,23 @@ const GraphSource = (props: GraphSourceProps): JSX.Element => {
             </div>
           </Text>
         </Box>
-        <Box height="100%" pad="small" round="small">
-          Hello World
+        <Box
+          height="100%"
+          pad="small"
+          background="rgb(30, 30, 30)"
+          round="small"
+        >
+          <SyntaxHighlighter
+            language="javascript"
+            style={vscDarkPlus}
+            customStyle={{ padding: '0px', margin: '0px', marginTop: '0px' }}
+            children={GRAPHDEFINITION}
+          />
+        </Box>
+        <Box pad="small">
+          <Text size="small" weight="bold">
+            *Note: "neighbors" array references other node ids
+          </Text>
         </Box>
       </Box>
     </div>

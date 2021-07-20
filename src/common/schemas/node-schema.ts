@@ -11,7 +11,13 @@ export const NodeSchema: JSONSchemaType<Node> = {
     value: {
       type: 'string',
     },
+    neighbors: {
+      type: 'array',
+      items: {
+        type: 'integer',
+      },
+    },
   },
-  required: ['id', 'value'],
+  required: ['id', 'value', 'neighbors'],
   additionalProperties: false,
 };
