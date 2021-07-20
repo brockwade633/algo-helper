@@ -5,13 +5,13 @@ export const GRAPHDEFINITION = `
   }
 
   Meta {
-    title: string;
-    author?: string;
+    title: String;
+    author?: String;
   }
 
   Node {
-    id: number;
-    value: string;
-    neighbors: number[];
+    id: Number;
+    value: String;
+    neighbors: Number[];
   }
 `;

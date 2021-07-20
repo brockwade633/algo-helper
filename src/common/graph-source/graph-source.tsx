@@ -93,7 +93,7 @@ const GraphSource = (props: GraphSourceProps): JSX.Element => {
           <SyntaxHighlighter
             language="javascript"
             style={vscDarkPlus}
-            customStyle={{ padding: '0px', margin: '0px', marginTop: '0px' }}
+            customStyle={{ padding: "0px" }}
             children={GRAPHDEFINITION}
           />
         </Box>
