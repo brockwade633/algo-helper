@@ -1,4 +1,4 @@
-export const GRAPHDEFINITION = `
+export const DEFAULTGRAPHDEFINITION = `
   Graph {
     meta: Meta;
     adjacencyList: Node[];

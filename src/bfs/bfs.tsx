@@ -3,7 +3,7 @@ import SplitPane from 'react-split-pane';
 import { Markdown } from 'grommet';
 import { GraphAnimation } from '../common';
 import { BFSWrapper, cytoBFSTransform, defaultBFS, cytoWrapper } from './';
-import { GraphSource } from '../common';
+import { GraphInfo } from '../common';
 import { validateGraph } from '../common';
 import { ErrorObject } from 'ajv';
 import { GraphSchema } from '../common/schemas';
@@ -70,7 +70,7 @@ const BFS = (): JSX.Element => {
               containerRef: currRef,
             }}
           />
-          <GraphSource
+          <GraphInfo
             {...{
               containerRef: currRef,
               source: text,
