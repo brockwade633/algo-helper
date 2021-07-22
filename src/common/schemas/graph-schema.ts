@@ -1,13 +1,11 @@
 import { JSONSchemaType } from 'ajv';
 import { Graph } from '../models';
-import { MetaSchema, NodeSchema } from './';
 
 export const GraphSchema: JSONSchemaType<Graph> = {
   $id: 'algo-helper/schema.json',
   type: 'object',
   properties: {
     meta: {
-      // for some reason ajv throws errors when MetaSchema is referenced here externally
       type: 'object',
       properties: {
         title: {
@@ -23,7 +21,25 @@ export const GraphSchema: JSONSchemaType<Graph> = {
     },
     adjacencyList: {
       type: 'array',
-      items: NodeSchema,
+      items: {
+        type: 'object',
+        properties: {
+          id: {
+            type: 'integer',
+          },
+          value: {
+            type: 'string',
+          },
+          neighbors: {
+            type: 'array',
+            items: {
+              type: 'integer',
+            },
+          },
+        },
+        required: ['id', 'value', 'neighbors'],
+        additionalProperties: false,
+      },
     },
   },
   required: ['meta', 'adjacencyList'],

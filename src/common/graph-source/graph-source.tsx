@@ -1,6 +1,7 @@
 import React from 'react';
-import { Box, Text, TextArea } from 'grommet';
+import { Box, Text } from 'grommet';
 import { StatusGood, StatusWarning, Code, Notes } from 'grommet-icons';
+import Editor from '@monaco-editor/react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 //import { foundation } from 'react-syntax-highlighter/dist/esm/styles/hljs/';
@@ -37,17 +38,11 @@ const GraphSource = (props: GraphSourceProps): JSX.Element => {
             side: 'all',
           }}
         >
-          <TextArea
-            fill
-            plain
-            focusIndicator={false}
-            resize={false}
-            id="graph-data"
-            name="graph-data"
-            size="small"
-            value={source}
-            className={errors.length > 0 ? 'error' : 'good'}
-            onChange={(e) => handleSourceChange(e.target.value)}
+          <Editor
+            height="100%"
+            defaultLanguage="json"
+            defaultValue={source}
+            onChange={(val) => handleSourceChange(val)}
           />
         </Box>
         <Box pad="small">
@@ -93,7 +88,7 @@ const GraphSource = (props: GraphSourceProps): JSX.Element => {
           <SyntaxHighlighter
             language="javascript"
             style={vscDarkPlus}
-            customStyle={{ padding: "0px" }}
+            customStyle={{ padding: '0px' }}
             children={GRAPHDEFINITION}
           />
         </Box>

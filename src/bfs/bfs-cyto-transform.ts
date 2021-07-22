@@ -1,7 +1,8 @@
 import { Graph } from '../common/models';
+import cytoscape from 'cytoscape';
 
 export const cytoBFSTransform = (json: Graph) => {
-  let cytoData = [];
+  let cytoData: cytoscape.ElementDefinition[] = [];
   let e = 0;
   for (const node of json.adjacencyList) {
     // node
