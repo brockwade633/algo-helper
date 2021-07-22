@@ -1,5 +1,5 @@
-import { RefObject } from "react";
+import { RefObject } from 'react';
 
 export interface GraphAnimationProps {
-    containerRef: RefObject<HTMLDivElement> | undefined;
+  containerRef: RefObject<HTMLDivElement> | undefined;
 }

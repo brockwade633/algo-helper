@@ -1,5 +1,5 @@
 export * from './graph-animation';
-export * from './graph-source';
+export * from './graph-info';
 export * from './hooks';
 export * from './models';
 export * from './schemas';

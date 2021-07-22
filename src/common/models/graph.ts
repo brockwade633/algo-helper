@@ -1,6 +1,6 @@
-import { Node, Edge } from './';
+import { Node, MetaData } from './';
 
 export interface Graph {
-    nodes: Node[];
-    edges: Edge[];
+  meta: MetaData;
+  adjacencyList: Node[];
 }

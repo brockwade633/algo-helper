@@ -1,20 +1,47 @@
 import { JSONSchemaType } from 'ajv';
 import { Graph } from '../models';
-import { NodeSchema, EdgeSchema } from '.';
 
 export const GraphSchema: JSONSchemaType<Graph> = {
-    $id: "algo-helper/schema.json",
-    type: "object",
-    properties: {
-        nodes: {
-            type: "array",
-            items: NodeSchema
+  $id: 'algo-helper/schema.json',
+  type: 'object',
+  properties: {
+    meta: {
+      type: 'object',
+      properties: {
+        title: {
+          type: 'string',
         },
-        edges: {
-            type: "array",
-            items: EdgeSchema
-        }
+        author: {
+          type: 'string',
+          nullable: true,
+        },
+      },
+      required: ['title'],
+      additionalProperties: false,
     },
-    required: ["nodes", "edges"],
-    additionalProperties: false
+    adjacencyList: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          id: {
+            type: 'integer',
+          },
+          value: {
+            type: 'string',
+          },
+          neighbors: {
+            type: 'array',
+            items: {
+              type: 'integer',
+            },
+          },
+        },
+        required: ['id', 'value', 'neighbors'],
+        additionalProperties: false,
+      },
+    },
+  },
+  required: ['meta', 'adjacencyList'],
+  additionalProperties: false,
 };

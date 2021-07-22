@@ -1,28 +1,23 @@
 import { JSONSchemaType } from 'ajv';
-import { Node } from '../models';
+import { MetaData } from '../models';
 
 /**
  * For some reason ajv validations don't work when these nested sub-schemas are referenced
  * from the top level graph schema. Not using them currently but we'll keep them around for
  * now, as a reference.
  */
-export const NodeSchema: JSONSchemaType<Node> = {
-  $id: 'algo-helper/node.json',
+export const MetaSchema: JSONSchemaType<MetaData> = {
+  $id: 'algo-helper/meta.json',
   type: 'object',
   properties: {
-    id: {
-      type: 'integer',
-    },
-    value: {
+    title: {
       type: 'string',
     },
-    neighbors: {
-      type: 'array',
-      items: {
-        type: 'integer',
-      },
+    author: {
+      type: 'string',
+      nullable: true,
     },
   },
-  required: ['id', 'value', 'neighbors'],
+  required: ['title'],
   additionalProperties: false,
 };

@@ -1,20 +1,28 @@
 import { Graph } from '../common/models';
+import cytoscape from 'cytoscape';
 
 export const cytoBFSTransform = (json: Graph) => {
-    let cytoData = [];
-    // nodes
-    for (const node of json.nodes) {
-        cytoData.push({
-            data: { id: `n${node.id}`, value: node.value }
-        });
-    }
-
+  let cytoData: cytoscape.ElementDefinition[] = [];
+  let e = 0;
+  for (const node of json.adjacencyList) {
+    // node
+    cytoData.push({
+      data: { id: `n${node.id}`, value: node.value },
+    });
     // edges
-    for (const edge of json.edges) {
+    if (node.neighbors.length) {
+      for (const neighbor of node.neighbors) {
         cytoData.push({
-            data: { id: json.edges.indexOf(edge).toString(), source: `n${edge.from}`, target: `n${edge.to}` }
+          data: {
+            id: e.toString(),
+            source: `n${node.id}`,
+            target: `n${neighbor}`,
+          },
         });
+        e++;
+      }
     }
+  }
 
-    return cytoData;
+  return cytoData;
 };
