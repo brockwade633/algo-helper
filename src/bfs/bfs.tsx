@@ -1,14 +1,17 @@
 import React, { useRef, useState, RefObject } from 'react';
 import SplitPane from 'react-split-pane';
 import { Markdown } from 'grommet';
-import { GraphAnimation } from '../common';
-import { BFSWrapper, cytoBFSTransform, defaultBFS, cytoWrapper } from './';
-import { GraphInfo } from '../common';
-import { validateGraph } from '../common';
+import { BFSWrapper, cytoBFSTransform, defaultBFS } from './';
+import {
+  GraphAnimation,
+  GraphInfo,
+  GraphSchema,
+  validateGraph,
+  useCytoscape,
+  cytoWrapper,
+} from '../common';
 import { ErrorObject } from 'ajv';
-import { GraphSchema } from '../common/schemas';
 import cytoscape from 'cytoscape';
-import { useCytoscape } from '../common';
 
 const BFS = (): JSX.Element => {
   const currRef = useRef<HTMLDivElement>(null);

@@ -1,4 +1,4 @@
-import React, { RefObject } from 'react';
+import { RefObject } from 'react';
 import cytoscape, { CytoscapeOptions, LayoutOptions } from 'cytoscape';
 
 export const cytoWrapper = (

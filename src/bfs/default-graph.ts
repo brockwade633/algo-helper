@@ -1,7 +1,6 @@
 export const defaultBFS = {
   meta: {
     title: 'BFS',
-    author: 'bwade',
   },
   adjacencyList: [
     {

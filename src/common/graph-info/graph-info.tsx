@@ -1,4 +1,5 @@
 import React from 'react';
+import { Box } from 'grommet';
 import { GraphSource } from './';
 import { GraphDefinition } from './';
 import { GraphInfoProps } from './';
@@ -13,7 +14,7 @@ const GraphInfo = (props: GraphInfoProps): JSX.Element => {
   handleCytoChange(parentRef);
 
   return (
-    <div style={{ display: 'flex', width: '100%' }}>
+    <Box direction="row" width="100%">
       <GraphSource
         {...{
           source: source,
@@ -22,7 +23,7 @@ const GraphInfo = (props: GraphInfoProps): JSX.Element => {
         }}
       />
       <GraphDefinition />
-    </div>
+    </Box>
   );
 };
 export default GraphInfo;
