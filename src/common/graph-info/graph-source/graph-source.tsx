@@ -23,6 +23,7 @@ const GraphSource = (props: GraphSourceProps): JSX.Element => {
         height="100%"
         pad="small"
         round="small"
+        elevation="large"
         border={{
           color: `${errors.length ? 'red' : 'green'}`,
           size: 'small',

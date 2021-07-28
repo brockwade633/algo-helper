@@ -17,7 +17,13 @@ const GraphDefinition = (): JSX.Element => {
           </div>
         </Text>
       </Box>
-      <Box height="100%" pad="small" background="rgb(30, 30, 30)" round="small">
+      <Box
+        height="100%"
+        pad="small"
+        elevation="large"
+        background="rgb(30, 30, 30)"
+        round="small"
+      >
         <SyntaxHighlighter
           language="javascript"
           style={vscDarkPlus}

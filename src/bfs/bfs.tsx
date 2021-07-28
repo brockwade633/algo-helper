@@ -68,11 +68,7 @@ const BFS = (): JSX.Element => {
             cytoWrapper(cytoData, currRef);
           }}
         >
-          <GraphAnimation
-            {...{
-              containerRef: currRef,
-            }}
-          />
+          <GraphAnimation {...{ containerRef: currRef }} />
           <GraphInfo
             {...{
               containerRef: currRef,
