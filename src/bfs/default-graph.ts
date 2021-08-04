@@ -2,6 +2,7 @@ export const defaultBFS = {
   meta: {
     title: 'BFS',
   },
+  rootId: 1,
   adjacencyList: [
     {
       id: 1,

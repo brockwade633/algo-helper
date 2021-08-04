@@ -19,7 +19,7 @@ const GraphDefinition = (): JSX.Element => {
       </Box>
       <Box
         height="100%"
-        pad="small"
+        pad="xsmall"
         elevation="large"
         background="rgb(30, 30, 30)"
         round="small"
@@ -33,7 +33,7 @@ const GraphDefinition = (): JSX.Element => {
       </Box>
       <Box pad="small">
         <Text size="small" weight="bold">
-          *Note: "neighbors" array references other node ids
+          ** "neighbors" array references other node ids **
         </Text>
       </Box>
     </Box>

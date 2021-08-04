@@ -19,6 +19,9 @@ export const GraphSchema: JSONSchemaType<Graph> = {
       required: ['title'],
       additionalProperties: false,
     },
+    rootId: {
+      type: 'integer',
+    },
     adjacencyList: {
       type: 'array',
       items: {
@@ -42,6 +45,6 @@ export const GraphSchema: JSONSchemaType<Graph> = {
       },
     },
   },
-  required: ['meta', 'adjacencyList'],
+  required: ['meta', 'rootId', 'adjacencyList'],
   additionalProperties: false,
 };

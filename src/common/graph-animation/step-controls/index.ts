@@ -1,1 +1,1 @@
-export { default as StepControls } from './step-controls';
+export { default as StepControlPanel } from './step-controls';

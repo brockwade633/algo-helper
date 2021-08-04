@@ -24,6 +24,9 @@ const BFS = (): JSX.Element => {
     cytoscape.ElementDefinition[] | undefined
   >(cytoBFSTransform(defaultBFS));
 
+  // const [queue, setQueue] = useState<number[]>([JSON.parse(text).rootId]);
+  // const [visited, setVisited] = useState<number[]>([]);
+
   const parseSource = (sourceText: string) => {
     try {
       const sourceJson = JSON.parse(sourceText);
@@ -68,7 +71,7 @@ const BFS = (): JSX.Element => {
             cytoWrapper(cytoData, currRef);
           }}
         >
-          <GraphAnimation {...{ containerRef: currRef }} />
+          <GraphAnimation {...{ root: JSON.parse(text).rootId, sourceCytoData: cytoData, containerRef: currRef }} />
           <GraphInfo
             {...{
               containerRef: currRef,
