@@ -1,14 +1,16 @@
 import React from 'react';
 import { Box, Text } from 'grommet';
 import { GraphAnimationProps } from './';
-import { StepControlPanel } from './step-controls';
+import { StepControlPanel } from './step-control-panel';
 
 const GraphAnimation = (props: GraphAnimationProps): JSX.Element => {
   return (
     <Box height="100%" width="100%" direction="row">
       <Box pad="small" direction="column" width="75%">
-        <Box pad={{ top: "none", bottom: "small" }} flex={false} align="center">
-          <Text size="xsmall" weight="bold">** Click and Drag to move Graph, Scroll Up and Down to Zoom **</Text>
+        <Box pad={{ top: 'none', bottom: 'small' }} flex={false} align="center">
+          <Text size="xsmall" weight="bold">
+            ** Click and Drag to move Graph, Scroll Up and Down to Zoom **
+          </Text>
         </Box>
         <Box
           border={{
@@ -24,7 +26,14 @@ const GraphAnimation = (props: GraphAnimationProps): JSX.Element => {
         />
       </Box>
       <Box pad="small" width="25%" direction="column">
-        <StepControlPanel {...{ root: props.root, sourceCytoData: props.sourceCytoData, containerRef: props.containerRef }} />
+        <StepControlPanel
+          {...{
+            graph: props.graph,
+            sourceCytoData: props.sourceCytoData,
+            containerRef: props.containerRef,
+            algoState: props.algoState,
+          }}
+        />
       </Box>
     </Box>
   );
