@@ -3,8 +3,6 @@ import cytoscape from 'cytoscape';
 import { Graph } from '../models';
 
 export interface GraphAnimationProps {
-  graph: Graph | undefined;
-  sourceCytoData: cytoscape.ElementDefinition[] | undefined;
+  stepControlPanel: JSX.Element;
   containerRef: RefObject<HTMLDivElement> | undefined;
-  algoState: any;
 }

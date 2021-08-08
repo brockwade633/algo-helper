@@ -5,20 +5,6 @@ export const GraphSchema: JSONSchemaType<Graph> = {
   $id: 'algo-helper/schema.json',
   type: 'object',
   properties: {
-    meta: {
-      type: 'object',
-      properties: {
-        title: {
-          type: 'string',
-        },
-        author: {
-          type: 'string',
-          nullable: true,
-        },
-      },
-      required: ['title'],
-      additionalProperties: false,
-    },
     rootId: {
       type: 'integer',
     },
@@ -45,6 +31,6 @@ export const GraphSchema: JSONSchemaType<Graph> = {
       },
     },
   },
-  required: ['meta', 'rootId', 'adjacencyList'],
+  required: ['rootId', 'adjacencyList'],
   additionalProperties: false,
 };

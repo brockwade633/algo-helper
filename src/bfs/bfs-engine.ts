@@ -1,27 +1,40 @@
-import { createContext, Context, useContext } from 'react';
 import { Graph } from '../common/models';
+import cytoscape from 'cytoscape';
 
-export const handleBFSAlgoActions = (
-  action: string,
+export const handleNext = (
   graph: Graph,
-  queueContext: Context<number[]>,
-  visitedContext: Context<number[]>,
+  queue: number[],
+  updateQueue: Function,
+  visited: number[],
+  updateVisited: Function,
+  cytoData: cytoscape.ElementDefinition[],
+  updateCytoData: Function,
 ) => {
-  let queue = useContext(queueContext);
-  let visited = useContext(visitedContext);
-  if (action === 'next') {
-    const currNode = queue.pop();
-  }
-};
+  if (!graph.rootId) return;
 
-//
-// Maybe:
-//
-// Implement methods for each of the actions, that each onClick method can leverage:
-//
-// export const handlePrev = () => {}
-// export const handleNext = () => {}
-//  .
-//  .
-//  .
-//
+  // pop off next node
+  const currNodeId = queue.pop();
+
+  // find neighbors and add to queue
+  const currNode = graph.adjacencyList.filter(
+    (node) => node.id === currNodeId,
+  )[0];
+  for (const nodeId of currNode.neighbors) {
+    queue.unshift(nodeId);
+  }
+  updateQueue(queue);
+
+  // add current node to visited list
+  currNodeId && visited.push(currNodeId);
+  updateVisited(visited);
+
+  // modify cytodata to represent visited node
+  const newCytodata = cytoData.map((data) => {
+    return data.data.id === `n${currNodeId}`
+      ? { ...data, style: { 'background-color': 'red' } }
+      : data;
+  });
+  updateCytoData(newCytodata);
+
+  return newCytodata;
+};

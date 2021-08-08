@@ -13,36 +13,28 @@ import {
 } from 'grommet-icons';
 import { Subject } from 'rxjs';
 import { cytoWrapper } from '../..';
+import cytoscape from 'cytoscape';
+import { handleNext } from '../../../bfs';
+import { StepControlPanelProps } from './';
 
-const StepControlPanel = (props): JSX.Element => {
+const StepControlPanel = (props: StepControlPanelProps): JSX.Element => {
   const [isPlaying, setIsPlaying] = useState(false);
 
   const stepControl$ = new Subject();
 
-  // consider making the graph, queue, visited all react contexts? 
-  const graph = props.graph;
-  
-  const queue = props.algoState.queue;
-  const updateQueue = props.algoState.updateQueue;
-  const visited = props.algoState.visited;
-  const visitedQueue = props.algoState.updateVisited;
-
-  //
-  // For each of the actions, find the right node in the queue or visited list
-  // and adjust the style of that node accordingly, inside the cytoData. Then
-  // use setCytoData to update global state, and pass the new data to the cytoWrapper.
-  //
-  // Maybe:
-  //
-  // -> Inside of each action method:
-  //    1. move the algo forward / back by creating the appropriate updated cytodata collection, using the queue context
-  //    2. call setCytoData => update global state
-  //    3. pass the updated cytodata collection onto the step control stream
-  //    4. update queue / visited contexts
-  //
-  // -> Inside useEffect, inside the stream subscribe callback:
-  //    1.  call cytoWrapper with the cytodata collection received from the stream
-  //
+  let graph;
+  try {
+    graph = JSON.parse(props.graphStr);
+  } catch (error) {
+    graph = {};
+  }
+  const queue = props.queue;
+  const updateQueue = props.updateQueue;
+  const visited = props.visited;
+  const updateVisited = props.updateVisited;
+  const cytoData = props.cytoData;
+  const updateCytoData = props.updateCytoData;
+  const ref = props.containerRef;
 
   const previous = () => {
     stepControl$.next('prev');
@@ -60,17 +52,21 @@ const StepControlPanel = (props): JSX.Element => {
     stepControl$.next('pause');
   };
   const next = () => {
-    console.log(queue);
-    console.log(graph);
-    
-    stepControl$.next('next');
+    const newCyto = handleNext(
+      graph,
+      queue,
+      updateQueue,
+      visited,
+      updateVisited,
+      cytoData,
+      updateCytoData,
+    );
+    stepControl$.next(newCyto);
   };
 
   useEffect(() => {
-    stepControl$.subscribe((action) => {
-      if (action === 'next') {
-        cytoWrapper(props.sourceCytoData, props.containerRef);
-      }
+    stepControl$.subscribe((data: cytoscape.ElementDefinition[]) => {
+      ref && cytoWrapper(data, ref);
     });
   });
 
@@ -148,7 +144,6 @@ const StepControlPanel = (props): JSX.Element => {
           hoverIndicator={true}
           onClick={reset}
         />
-        {/* {isPlaying ? (<Button id="alg-stp-pause" icon={<PauseFill size="16px" color="black" />} hoverIndicator={true} onClick={pause} />) : (<Button id="alg-stp-play" icon={<PlayFill size="16px" color="black" />} hoverIndicator={true} onClick={play} />)} */}
         <Button
           icon={
             isPlaying ? (

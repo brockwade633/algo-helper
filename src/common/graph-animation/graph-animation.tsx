@@ -1,7 +1,6 @@
 import React from 'react';
 import { Box, Text } from 'grommet';
 import { GraphAnimationProps } from './';
-import { StepControlPanel } from './step-control-panel';
 
 const GraphAnimation = (props: GraphAnimationProps): JSX.Element => {
   return (
@@ -26,14 +25,7 @@ const GraphAnimation = (props: GraphAnimationProps): JSX.Element => {
         />
       </Box>
       <Box pad="small" width="25%" direction="column">
-        <StepControlPanel
-          {...{
-            graph: props.graph,
-            sourceCytoData: props.sourceCytoData,
-            containerRef: props.containerRef,
-            algoState: props.algoState,
-          }}
-        />
+        {props.stepControlPanel}
       </Box>
     </Box>
   );

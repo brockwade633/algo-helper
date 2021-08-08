@@ -1,31 +1,33 @@
 import React, { useRef, useState, RefObject } from 'react';
 import SplitPane from 'react-split-pane';
 import { Markdown } from 'grommet';
-import { BFSWrapper, cytoBFSTransform, defaultBFS, QueueContext, VisitedContext } from './';
+import { BFSWrapper, cytoBFSTransform, defaultBFS } from './';
 import {
   GraphAnimation,
   GraphInfo,
   GraphSchema,
   validateGraph,
   useCytoscape,
-  cytoWrapper
+  cytoWrapper,
 } from '../common';
 import { ErrorObject } from 'ajv';
 import cytoscape from 'cytoscape';
+import { StepControlPanel } from '../common/graph-animation/step-control-panel';
 
 const BFS = (): JSX.Element => {
   const currRef = useRef<HTMLDivElement>(null);
 
-  // Change to [graphStr, setGraphStr]
-  const [text, setText] = useState(JSON.stringify(defaultBFS, undefined, 2));
+  const [graphStr, setGraphStr] = useState(
+    JSON.stringify(defaultBFS, undefined, 2),
+  );
   const [errors, setErrors] = useState<
     ErrorObject<string, Record<string, any>, unknown>[]
   >([]);
-  const [cytoData, setCytoData] = useState<
-    cytoscape.ElementDefinition[] | undefined
-  >(cytoBFSTransform(defaultBFS));
+  const [cytoData, setCytoData] = useState<cytoscape.ElementDefinition[]>(
+    cytoBFSTransform(defaultBFS),
+  );
 
-  const [queue, setQueue] = useState<number[]>([JSON.parse(text).rootId]);
+  const [queue, setQueue] = useState<number[]>([defaultBFS.rootId]);
   const [visited, setVisited] = useState<number[]>([]);
 
   const parseSource = (sourceText: string) => {
@@ -46,31 +48,24 @@ const BFS = (): JSX.Element => {
     }
   };
 
-  const handleBFSGraphSourceChange = (source: string) => {
-    setText(parseSource(source));
-  };
-
-  const handleBFSCytoChange = (ref: RefObject<HTMLDivElement>) => {
-    if (ref) {
-      useCytoscape(cytoData, ref);
-    }
-  };
-
-  // const updateBFSState = (newQueue: number[], newVisited: number[]) => {
-  //   setQueue(newQueue);
-  //   setVisited(newVisited);
-  // };
-
-  const bfsState = {
-    queue: queue,
-    updateQueue: (newQueue: number[]) => {
-      setQueue(newQueue);
-    },
-    visited: visited,
-    updateVisited: (newVisited: number[]) => {
-      setVisited(newVisited);
-    }
-  }
+  const controlPanel = (
+    <StepControlPanel
+      graphStr={graphStr}
+      queue={queue}
+      updateQueue={(newQueue: number[]) => {
+        setQueue(newQueue);
+      }}
+      visited={visited}
+      updateVisited={(newVisited: number[]) => {
+        setVisited(newVisited);
+      }}
+      cytoData={cytoData}
+      updateCytoData={(newCytoData: cytoscape.ElementDefinition[]) => {
+        setCytoData(newCytoData);
+      }}
+      containerRef={currRef}
+    />
+  );
 
   return (
     <BFSWrapper>
@@ -83,30 +78,24 @@ const BFS = (): JSX.Element => {
       >
         <SplitPane
           split="horizontal"
-          defaultSize="50%"
+          defaultSize="60%"
           onChange={() => {
             cytoWrapper(cytoData, currRef);
           }}
         >
-          {/* <QueueContext.Provider>
-            <VisitedContext.Provider> */}
-              <GraphAnimation
-                {...{
-                  graph: JSON.parse(text),
-                  sourceCytoData: cytoData,
-                  containerRef: currRef,
-                  algoState: bfsState,
-                }}
-              />
-            {/* </VisitedContext.Provider>
-          </QueueContext.Provider> */}
+          <GraphAnimation
+            containerRef={currRef}
+            stepControlPanel={controlPanel}
+          />
           <GraphInfo
-            {...{
-              containerRef: currRef,
-              source: text,
-              errors: errors,
-              handleSourceChange: handleBFSGraphSourceChange,
-              handleCytoChange: handleBFSCytoChange,
+            containerRef={currRef}
+            source={graphStr}
+            errors={errors}
+            handleSourceChange={(source: string) => {
+              setGraphStr(parseSource(source));
+            }}
+            handleCytoChange={(ref: RefObject<HTMLDivElement>) => {
+              ref && useCytoscape(cytoData, ref);
             }}
           />
         </SplitPane>

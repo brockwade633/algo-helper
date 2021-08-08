@@ -3,7 +3,7 @@ import { Node } from '../models';
 
 /**
  * For some reason ajv validations don't work when these nested sub-schemas are referenced
- * from the top level graph schema. Not using them currently but we'll keep them around for
+ * from the top level graph schema. Not using this currently but we'll keep it around for
  * now, as a reference.
  */
 export const NodeSchema: JSONSchemaType<Node> = {

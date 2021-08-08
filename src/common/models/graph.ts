@@ -1,7 +1,6 @@
-import { Node, MetaData } from './';
+import { Node } from './';
 
 export interface Graph {
-  meta: MetaData;
   rootId: number;
   adjacencyList: Node[];
 }
