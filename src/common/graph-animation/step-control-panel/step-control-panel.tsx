@@ -14,7 +14,7 @@ import {
 import { Subject } from 'rxjs';
 import { cytoWrapper } from '../..';
 import cytoscape from 'cytoscape';
-import { handleNext } from '../../../bfs';
+import { handlePrev, handleReset, handleNext } from '../../../bfs';
 import { StepControlPanelProps } from './';
 
 const StepControlPanel = (props: StepControlPanelProps): JSX.Element => {
@@ -22,12 +22,7 @@ const StepControlPanel = (props: StepControlPanelProps): JSX.Element => {
 
   const stepControl$ = new Subject();
 
-  let graph;
-  try {
-    graph = JSON.parse(props.graphStr);
-  } catch (error) {
-    graph = {};
-  }
+  const graphStr = props.graphStr;
   const queue = props.queue;
   const updateQueue = props.updateQueue;
   const visited = props.visited;
@@ -37,11 +32,29 @@ const StepControlPanel = (props: StepControlPanelProps): JSX.Element => {
   const ref = props.containerRef;
 
   const previous = () => {
-    stepControl$.next('prev');
+    const newCyto = handlePrev(
+      graphStr,
+      queue,
+      updateQueue,
+      visited,
+      updateVisited,
+      cytoData,
+      updateCytoData,
+    );
+    stepControl$.next(newCyto);
   };
   const reset = () => {
     setIsPlaying(false);
-    stepControl$.next('reset');
+    const newCyto = handleReset(
+      graphStr,
+      queue,
+      updateQueue,
+      visited,
+      updateVisited,
+      cytoData,
+      updateCytoData,
+    );
+    stepControl$.next(newCyto);
   };
   const play = () => {
     setIsPlaying(true);
@@ -53,7 +66,7 @@ const StepControlPanel = (props: StepControlPanelProps): JSX.Element => {
   };
   const next = () => {
     const newCyto = handleNext(
-      graph,
+      graphStr,
       queue,
       updateQueue,
       visited,
@@ -72,7 +85,7 @@ const StepControlPanel = (props: StepControlPanelProps): JSX.Element => {
 
   return (
     <Box
-      pad={{ top: 'none', bottom: 'small' }}
+      pad={{ top: 'none', bottom: 'medium' }}
       flex={false}
       align="center"
       direction="column"
@@ -128,35 +141,36 @@ const StepControlPanel = (props: StepControlPanelProps): JSX.Element => {
         </Text>
       </Box>
       <Box
-        background="silver"
+        background="#ffa500"
         round="small"
         flex={false}
         elevation="large"
         direction="row"
       >
         <Button
-          icon={<Previous size="16px" color="black" />}
+          icon={<Previous size="26px" color="black" />}
           hoverIndicator={true}
           onClick={previous}
         />
         <Button
-          icon={<Refresh size="16px" color="black" />}
+          icon={<Refresh size="26px" color="black" />}
           hoverIndicator={true}
           onClick={reset}
         />
         <Button
           icon={
             isPlaying ? (
-              <PauseFill size="16px" color="black" />
+              <PauseFill size="26px" color="black" />
             ) : (
-              <PlayFill size="16px" color="black" />
+              <PlayFill size="26px" color="black" />
             )
           }
           hoverIndicator={true}
           onClick={isPlaying ? pause : play}
+          disabled={true}
         />
         <Button
-          icon={<Next size="16px" color="black" />}
+          icon={<Next size="26px" color="black" />}
           hoverIndicator={true}
           onClick={next}
         />

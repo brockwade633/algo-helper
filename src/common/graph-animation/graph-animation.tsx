@@ -1,8 +1,10 @@
 import React from 'react';
 import { Box, Text } from 'grommet';
-import { GraphAnimationProps } from './';
+import { GraphAnimationProps, ListViewPanel } from './';
 
 const GraphAnimation = (props: GraphAnimationProps): JSX.Element => {
+  const queue = props.queue;
+  const visited = props.visited;
   return (
     <Box height="100%" width="100%" direction="row">
       <Box pad="small" direction="column" width="75%">
@@ -12,20 +14,21 @@ const GraphAnimation = (props: GraphAnimationProps): JSX.Element => {
           </Text>
         </Box>
         <Box
-          border={{
-            color: 'black',
-            size: 'xsmall',
-            style: 'solid',
-            side: 'all',
-          }}
+          className="graph-visualization"
           round="small"
           elevation="large"
           ref={props.containerRef}
           height="70vh"
         />
       </Box>
-      <Box pad="small" width="25%" direction="column">
+      <Box
+        pad={{ left: 'small', right: 'small', top: 'small' }}
+        width="25%"
+        direction="column"
+      >
         {props.stepControlPanel}
+        <ListViewPanel data={queue} label="Queue" height="50%" />
+        <ListViewPanel data={visited} label="Visited Nodes" height="50%" />
       </Box>
     </Box>
   );

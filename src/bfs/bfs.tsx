@@ -1,7 +1,7 @@
 import React, { useRef, useState, RefObject } from 'react';
 import SplitPane from 'react-split-pane';
-import { Markdown } from 'grommet';
-import { BFSWrapper, cytoBFSTransform, defaultBFS } from './';
+import { Box, Markdown } from 'grommet';
+import { BFSWrapper, cytoBFSTransform, defaultBFS, BFSCommentary } from './';
 import {
   GraphAnimation,
   GraphInfo,
@@ -13,6 +13,7 @@ import {
 import { ErrorObject } from 'ajv';
 import cytoscape from 'cytoscape';
 import { StepControlPanel } from '../common/graph-animation/step-control-panel';
+import { handleReset } from './bfs-engine';
 
 const BFS = (): JSX.Element => {
   const currRef = useRef<HTMLDivElement>(null);
@@ -48,21 +49,27 @@ const BFS = (): JSX.Element => {
     }
   };
 
+  const updateQueue = (newQueue: number[]) => {
+    setQueue(newQueue);
+  };
+
+  const updateVisited = (newVisited: number[]) => {
+    setVisited(newVisited);
+  };
+
+  const updateCytoData = (newCytoData: cytoscape.ElementDefinition[]) => {
+    setCytoData(newCytoData);
+  };
+
   const controlPanel = (
     <StepControlPanel
       graphStr={graphStr}
       queue={queue}
-      updateQueue={(newQueue: number[]) => {
-        setQueue(newQueue);
-      }}
+      updateQueue={updateQueue}
       visited={visited}
-      updateVisited={(newVisited: number[]) => {
-        setVisited(newVisited);
-      }}
+      updateVisited={updateVisited}
       cytoData={cytoData}
-      updateCytoData={(newCytoData: cytoscape.ElementDefinition[]) => {
-        setCytoData(newCytoData);
-      }}
+      updateCytoData={updateCytoData}
       containerRef={currRef}
     />
   );
@@ -70,8 +77,9 @@ const BFS = (): JSX.Element => {
   return (
     <BFSWrapper>
       <SplitPane
+        className="bfs-worksheet"
         split="vertical"
-        defaultSize="60%"
+        defaultSize="65%"
         onChange={() => {
           cytoWrapper(cytoData, currRef);
         }}
@@ -86,12 +94,23 @@ const BFS = (): JSX.Element => {
           <GraphAnimation
             containerRef={currRef}
             stepControlPanel={controlPanel}
+            queue={queue}
+            visited={visited}
           />
           <GraphInfo
             containerRef={currRef}
             source={graphStr}
             errors={errors}
             handleSourceChange={(source: string) => {
+              handleReset(
+                graphStr,
+                queue,
+                updateQueue,
+                visited,
+                updateVisited,
+                cytoData,
+                updateCytoData,
+              );
               setGraphStr(parseSource(source));
             }}
             handleCytoChange={(ref: RefObject<HTMLDivElement>) => {
@@ -99,7 +118,7 @@ const BFS = (): JSX.Element => {
             }}
           />
         </SplitPane>
-        <div>Breadth First Search</div>
+        <BFSCommentary />
       </SplitPane>
     </BFSWrapper>
   );

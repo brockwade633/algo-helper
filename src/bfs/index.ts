@@ -1,3 +1,4 @@
+export * from './bfs-commentary';
 export * from './bfs-wrapper';
 export * from './bfs-cyto-transform';
 export * from './bfs-engine';
