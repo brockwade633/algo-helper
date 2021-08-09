@@ -17,7 +17,13 @@ const GraphDefinition = (): JSX.Element => {
           </div>
         </Text>
       </Box>
-      <Box height="100%" pad="small" background="rgb(30, 30, 30)" round="small">
+      <Box
+        height="100%"
+        pad="xsmall"
+        elevation="large"
+        background="rgb(30, 30, 30)"
+        round="small"
+      >
         <SyntaxHighlighter
           language="javascript"
           style={vscDarkPlus}
@@ -27,7 +33,7 @@ const GraphDefinition = (): JSX.Element => {
       </Box>
       <Box pad="small">
         <Text size="small" weight="bold">
-          *Note: "neighbors" array references other node ids
+          ** "neighbors" array references other node ids **
         </Text>
       </Box>
     </Box>

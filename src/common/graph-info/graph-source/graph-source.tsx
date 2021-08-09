@@ -20,9 +20,11 @@ const GraphSource = (props: GraphSourceProps): JSX.Element => {
         </Text>
       </Box>
       <Box
+        className="graph-source"
         height="100%"
         pad="small"
         round="small"
+        elevation="large"
         border={{
           color: `${errors.length ? 'red' : 'green'}`,
           size: 'small',
@@ -38,7 +40,11 @@ const GraphSource = (props: GraphSourceProps): JSX.Element => {
         />
       </Box>
       <Box pad="small">
-        <Text size="small" color={errors.length ? 'red' : 'green'}>
+        <Text
+          size="small"
+          weight="bold"
+          color={errors.length ? 'red' : 'green'}
+        >
           {errors.length ? (
             errors.map((err) =>
               err.instancePath ? (

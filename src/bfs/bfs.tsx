@@ -1,25 +1,34 @@
 import React, { useRef, useState, RefObject } from 'react';
 import SplitPane from 'react-split-pane';
-import { Markdown } from 'grommet';
-import { GraphAnimation } from '../common';
-import { BFSWrapper, cytoBFSTransform, defaultBFS, cytoWrapper } from './';
-import { GraphInfo } from '../common';
-import { validateGraph } from '../common';
+import { BFSWrapper, cytoBFSTransform, defaultBFS, BFSCommentary } from './';
+import {
+  GraphAnimation,
+  GraphInfo,
+  GraphSchema,
+  validateGraph,
+  useCytoscape,
+  cytoWrapper,
+} from '../common';
 import { ErrorObject } from 'ajv';
-import { GraphSchema } from '../common/schemas';
 import cytoscape from 'cytoscape';
-import { useCytoscape } from '../common';
+import { StepControlPanel } from '../common/graph-animation/step-control-panel';
+import { handleReset } from './bfs-engine';
 
 const BFS = (): JSX.Element => {
   const currRef = useRef<HTMLDivElement>(null);
 
-  const [text, setText] = useState(JSON.stringify(defaultBFS, undefined, 2));
+  const [graphStr, setGraphStr] = useState(
+    JSON.stringify(defaultBFS, undefined, 2),
+  );
   const [errors, setErrors] = useState<
     ErrorObject<string, Record<string, any>, unknown>[]
   >([]);
-  const [cytoData, setCytoData] = useState<
-    cytoscape.ElementDefinition[] | undefined
-  >(cytoBFSTransform(defaultBFS));
+  const [cytoData, setCytoData] = useState<cytoscape.ElementDefinition[]>(
+    cytoBFSTransform(defaultBFS),
+  );
+
+  const [queue, setQueue] = useState<number[]>([defaultBFS.rootId]);
+  const [visited, setVisited] = useState<number[]>([]);
 
   const parseSource = (sourceText: string) => {
     try {
@@ -39,48 +48,76 @@ const BFS = (): JSX.Element => {
     }
   };
 
-  const handleBFSGraphSourceChange = (source: string) => {
-    setText(parseSource(source));
+  const updateQueue = (newQueue: number[]) => {
+    setQueue(newQueue);
   };
 
-  const handleBFSCytoChange = (ref: RefObject<HTMLDivElement>) => {
-    if (ref) {
-      useCytoscape(cytoData, ref);
-    }
+  const updateVisited = (newVisited: number[]) => {
+    setVisited(newVisited);
   };
+
+  const updateCytoData = (newCytoData: cytoscape.ElementDefinition[]) => {
+    setCytoData(newCytoData);
+  };
+
+  const controlPanel = (
+    <StepControlPanel
+      graphStr={graphStr}
+      queue={queue}
+      updateQueue={updateQueue}
+      visited={visited}
+      updateVisited={updateVisited}
+      cytoData={cytoData}
+      updateCytoData={updateCytoData}
+      containerRef={currRef}
+    />
+  );
 
   return (
     <BFSWrapper>
       <SplitPane
+        className="bfs-worksheet"
         split="vertical"
-        defaultSize="60%"
+        defaultSize="65%"
         onChange={() => {
           cytoWrapper(cytoData, currRef);
         }}
       >
         <SplitPane
           split="horizontal"
-          defaultSize="50%"
+          defaultSize="60%"
           onChange={() => {
             cytoWrapper(cytoData, currRef);
           }}
         >
           <GraphAnimation
-            {...{
-              containerRef: currRef,
-            }}
+            containerRef={currRef}
+            stepControlPanel={controlPanel}
+            queue={queue}
+            visited={visited}
           />
           <GraphInfo
-            {...{
-              containerRef: currRef,
-              source: text,
-              errors: errors,
-              handleSourceChange: handleBFSGraphSourceChange,
-              handleCytoChange: handleBFSCytoChange,
+            containerRef={currRef}
+            source={graphStr}
+            errors={errors}
+            handleSourceChange={(source: string) => {
+              handleReset(
+                graphStr,
+                queue,
+                updateQueue,
+                visited,
+                updateVisited,
+                cytoData,
+                updateCytoData,
+              );
+              setGraphStr(parseSource(source));
+            }}
+            handleCytoChange={(ref: RefObject<HTMLDivElement>) => {
+              ref && useCytoscape(cytoData, ref);
             }}
           />
         </SplitPane>
-        <div>Breadth First Search</div>
+        <BFSCommentary />
       </SplitPane>
     </BFSWrapper>
   );

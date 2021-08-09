@@ -1,12 +1,7 @@
 export const DEFAULTGRAPHDEFINITION = `
   Graph {
-    meta: Meta;
+    rootId: Number;
     adjacencyList: Node[];
-  }
-
-  Meta {
-    title: String;
-    author?: String;
   }
 
   Node {

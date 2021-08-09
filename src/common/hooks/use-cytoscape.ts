@@ -1,6 +1,6 @@
 import { RefObject, useEffect } from 'react';
 import cytoscape from 'cytoscape';
-import { cytoWrapper } from '../../bfs';
+import { cytoWrapper } from '../';
 
 export const useCytoscape = (
   data: cytoscape.ElementDefinition[] | undefined,

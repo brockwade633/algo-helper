@@ -1,3 +1,4 @@
+export * from './cytoscape';
 export * from './graph-animation';
 export * from './graph-info';
 export * from './hooks';

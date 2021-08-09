@@ -1,6 +1,26 @@
 import styled from 'styled-components';
 
 export const BFSWrapper = styled.div`
+  .bfs-commentary {
+    background-color: white;
+  }
+
+  .bfs-worksheet {
+    background-color: #d4e6f2;
+  }
+
+  .graph-source {
+    background-color: white;
+  }
+
+  .graph-visualization {
+    background-color: white;
+  }
+
+  .algo-panel {
+    background-color: white;
+  }
+
   .Resizer {
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
