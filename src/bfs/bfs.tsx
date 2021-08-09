@@ -1,6 +1,5 @@
 import React, { useRef, useState, RefObject } from 'react';
 import SplitPane from 'react-split-pane';
-import { Box, Markdown } from 'grommet';
 import { BFSWrapper, cytoBFSTransform, defaultBFS, BFSCommentary } from './';
 import {
   GraphAnimation,
