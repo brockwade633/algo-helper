@@ -41,7 +41,13 @@ export const handlePrev = (
 
   // revert cytodata styling to previous iteration
   const newCytodata = cytoData.map((data) => {
-    return data.data.id === `n${lastNodeId}` ? { ...data, style: null } : data;
+    if (queue.includes(Number(data.data.id?.slice(1)))) {
+      return { ...data, style: { 'background-color': '#d4e6f2' } };
+    } else if (visited.includes(Number(data.data.id?.slice(1)))) {
+      return { ...data, style: { 'background-color': '#ffa500' } };
+    } else {
+      return { ...data, style: null };
+    }
   });
   updateCytoData(newCytodata);
 
@@ -74,7 +80,11 @@ export const handleReset = (
 
   // reset cytodata styling
   const newCytoData = cytoData.map((data) => {
-    return { ...data, style: null };
+    if (data.data.id === `n${graph.rootId}`) {
+      return { ...data, style: { 'background-color': '#d4e6f2' } };
+    } else {
+      return { ...data, style: null };
+    }
   });
   updateCytoData(newCytoData);
 
@@ -121,9 +131,13 @@ export const handleNext = (
 
   // modify cytodata styling to represent visited node
   const newCytodata = cytoData.map((data) => {
-    return data.data.id === `n${currNodeId}`
-      ? { ...data, style: { 'background-color': '#ffa500' } }
-      : data;
+    if (queue.includes(Number(data.data.id?.slice(1)))) {
+      return { ...data, style: { 'background-color': '#d4e6f2' } };
+    } else if (data.data.id === `n${currNodeId}`) {
+      return { ...data, style: { 'background-color': '#ffa500' } };
+    } else {
+      return data;
+    }
   });
   updateCytoData(newCytodata);
 

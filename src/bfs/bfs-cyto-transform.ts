@@ -6,9 +6,14 @@ export const cytoBFSTransform = (json: Graph) => {
   let e = 0;
   for (const node of json.adjacencyList) {
     // node
-    cytoData.push({
-      data: { id: `n${node.id}`, value: node.value },
-    });
+    const data =
+      node.id === json.rootId
+        ? {
+            data: { id: `n${node.id}`, value: node.value },
+            style: { 'background-color': '#d4e6f2' },
+          }
+        : { data: { id: `n${node.id}`, value: node.value } };
+    cytoData.push(data);
     // edges
     if (node.neighbors.length) {
       for (const neighbor of node.neighbors) {
