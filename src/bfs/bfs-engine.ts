@@ -99,6 +99,7 @@ export const handleNext = (
   updateVisited: Function,
   cytoData: cytoscape.ElementDefinition[],
   updateCytoData: Function,
+  updateNextFrameCyto: Function,
 ): cytoscape.ElementDefinition[] => {
   let graph;
   try {
@@ -123,25 +124,27 @@ export const handleNext = (
       queue.unshift(nodeId);
     }
   }
-  updateQueue(queue);
+  //updateQueue(queue);
 
   // add current node to visited list
   currNodeId && visited.push(currNodeId);
-  updateVisited(visited);
+  //updateVisited(visited);
 
   // modify cytodata styling to represent visited node
-  const newCytodata = cytoData.map((data) => {
-    if (queue.includes(Number(data.data.id?.slice(1)))) {
-      return { ...data, style: { 'background-color': '#d4e6f2' } };
-    } else if (data.data.id === `n${currNodeId}`) {
-      return { ...data, style: { 'background-color': '#ffa500' } };
-    } else {
-      return data;
-    }
-  });
-  updateCytoData(newCytodata);
+  // cytoData = cytoData.map((data) => {
+  //   if (queue.includes(Number(data.data.id?.slice(1)))) {
+  //     return { ...data, style: { 'background-color': '#d4e6f2' } };
+  //   } else if (data.data.id === `n${currNodeId}`) {
+  //     return { ...data, style: { 'background-color': '#ffa500' } };
+  //   } else {
+  //     return data;
+  //   }
+  // });
+  //updateCytoData(cytoData);
 
-  return newCytodata;
+  updateNextFrameCyto(currNodeId, queue);
+
+  return cytoData;
 };
 
 const isNodeANeighborOfAVisitedNode = (

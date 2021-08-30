@@ -11,7 +11,8 @@ import {
   Rewind,
   Pause,
 } from 'grommet-icons';
-import { Subject } from 'rxjs';
+import { Subject, interval, Subscription, Observable } from 'rxjs';
+import { takeWhile, tap } from 'rxjs/operators';
 import { cytoWrapper } from '../..';
 import cytoscape from 'cytoscape';
 import { handlePrev, handleReset, handleNext } from '../../../bfs';
@@ -21,6 +22,8 @@ const StepControlPanel = (props: StepControlPanelProps): JSX.Element => {
   const [isPlaying, setIsPlaying] = useState(false);
 
   const stepControl$ = new Subject();
+  //const algoFrameRate = interval(2000);
+  let algoFrameEmitter: Subscription;
 
   const graphStr = props.graphStr;
   const queue = props.queue;
@@ -29,9 +32,11 @@ const StepControlPanel = (props: StepControlPanelProps): JSX.Element => {
   const updateVisited = props.updateVisited;
   const cytoData = props.cytoData;
   const updateCytoData = props.updateCytoData;
+  const updateNextFrameCytoData = props.updateNextFrameCytoData;
+  const updatePrevFrameCytoData = props.updatePrevFrameCytoData;
   const ref = props.containerRef;
 
-  const previous = () => {
+  const prevIter = () => {
     const newCyto = handlePrev(
       graphStr,
       queue,
@@ -58,14 +63,28 @@ const StepControlPanel = (props: StepControlPanelProps): JSX.Element => {
   };
   const play = () => {
     setIsPlaying(true);
-    stepControl$.next('play');
+
+    if (queue.length) {
+      algoFrameEmitter = interval(1000)
+        .pipe(takeWhile(() => queue.length > 0))
+        .subscribe({
+          next: (n) => {
+            nextIter();
+          },
+          error: (e) => console.log(`Control Panel Observable Error: ${e}`),
+          complete: () => setIsPlaying(false),
+        });
+    } else {
+      setIsPlaying(false);
+    }
   };
   const pause = () => {
     setIsPlaying(false);
-    stepControl$.next('pause');
+    console.log(algoFrameEmitter);
+    algoFrameEmitter.unsubscribe();
   };
-  const next = () => {
-    const newCyto = handleNext(
+  const nextIter = () => {
+    handleNext(
       graphStr,
       queue,
       updateQueue,
@@ -73,8 +92,9 @@ const StepControlPanel = (props: StepControlPanelProps): JSX.Element => {
       updateVisited,
       cytoData,
       updateCytoData,
+      updateNextFrameCytoData,
     );
-    stepControl$.next(newCyto);
+    stepControl$.next(cytoData);
   };
 
   useEffect(() => {
@@ -150,7 +170,7 @@ const StepControlPanel = (props: StepControlPanelProps): JSX.Element => {
         <Button
           icon={<Previous size="26px" color="black" />}
           hoverIndicator={true}
-          onClick={previous}
+          onClick={prevIter}
         />
         <Button
           icon={<Refresh size="26px" color="black" />}
@@ -167,12 +187,11 @@ const StepControlPanel = (props: StepControlPanelProps): JSX.Element => {
           }
           hoverIndicator={true}
           onClick={isPlaying ? pause : play}
-          disabled={true}
         />
         <Button
           icon={<Next size="26px" color="black" />}
           hoverIndicator={true}
-          onClick={next}
+          onClick={nextIter}
         />
       </Box>
     </Box>

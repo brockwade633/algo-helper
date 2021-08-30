@@ -10,5 +10,7 @@ export interface StepControlPanelProps {
   updateVisited: Function;
   cytoData: cytoscape.ElementDefinition[];
   updateCytoData: Function;
+  updateNextFrameCytoData: Function;
+  updatePrevFrameCytoData: Function;
   containerRef: RefObject<HTMLDivElement> | undefined;
 }

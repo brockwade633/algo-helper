@@ -9,7 +9,7 @@ const BFSCommentary = (): JSX.Element => {
   Once a neighbor is explored, it is placed onto a **queue** so that in a future iteration, *its* neighbors may be searched.\n
   Once all the neighboring nodes of the current node have been explored, the node is said to be **visited**, and marked as such
   via membership in a **visited** list. Then, the next node in the **queue** is popped off and the next iteration begins. 
-  In the animation to the left, the **visited** nodes are colored **orange**, while **un-visited** nodes that have been stored in the queue 
+  In the animation to the left, the **visited** nodes are colored **orange**, while **un-visited** nodes that have been stored in the **queue** 
   for future iterations are colored **blue**. 
   `;
   return (
