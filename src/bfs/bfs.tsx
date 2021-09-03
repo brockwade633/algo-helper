@@ -52,58 +52,8 @@ const BFS = (): JSX.Element => {
     setQueue(newQueue);
   };
 
-  const queuePush = (node: number) => {
-    setQueue((q) => {
-      q.unshift(node);
-      return q;
-    });
-  };
-
-  const queuePop = () => {
-    let poppedNode;
-    setQueue((q) => {
-      poppedNode = q.pop();
-      return q;
-    });
-    return poppedNode;
-  };
-
   const updateVisited = (newVisited: number[]) => {
     setVisited(newVisited);
-  };
-
-  const removeMostRecentVisited = () => {
-    let poppedNode;
-    setVisited((v) => {
-      poppedNode = v.pop();
-      return v;
-    });
-    return poppedNode;
-  };
-
-  const addToVisited = (node: number) => {
-    setVisited((v) => {
-      v.push(node);
-      return v;
-    });
-  };
-
-  const updateCytoData = (newCytoData: cytoscape.ElementDefinition[]) => {
-    setCytoData(newCytoData);
-  };
-
-  const handleNextFrameCytoData = (currNodeId: number, queue: number[]) => {
-    setCytoData((prevData) =>
-      prevData.map((data) => {
-        if (queue.includes(Number(data.data.id?.slice(1)))) {
-          return { ...data, style: { 'background-color': '#d4e6f2' } };
-        } else if (data.data.id === `n${currNodeId}`) {
-          return { ...data, style: { 'background-color': '#ffa500' } };
-        } else {
-          return data;
-        }
-      }),
-    );
   };
 
   const handlePrevFrameCytoData = (queue: number[], visited: number[]) => {
@@ -120,6 +70,32 @@ const BFS = (): JSX.Element => {
     );
   };
 
+  const handleResetCytoData = (rootId: number) => {
+    setCytoData((prevData) => 
+      prevData.map((data) => {
+        if (data.data.id === `n${rootId}`) {
+          return { ...data, style: { 'background-color': '#d4e6f2' } };
+        } else {
+          return { ...data, style: null };
+        }
+      }),
+    );
+  };
+
+  const handleNextFrameCytoData = (currNodeId: number, queue: number[]) => {
+    setCytoData((prevData) =>
+      prevData.map((data) => {
+        if (queue.includes(Number(data.data.id?.slice(1)))) {
+          return { ...data, style: { 'background-color': '#d4e6f2' } };
+        } else if (data.data.id === `n${currNodeId}`) {
+          return { ...data, style: { 'background-color': '#ffa500' } };
+        } else {
+          return data;
+        }
+      }),
+    );
+  };
+
   const controlPanel = (
     <StepControlPanel
       graphStr={graphStr}
@@ -128,9 +104,9 @@ const BFS = (): JSX.Element => {
       visited={visited}
       updateVisited={updateVisited}
       cytoData={cytoData}
-      updateCytoData={updateCytoData}
       updateNextFrameCytoData={handleNextFrameCytoData}
       updatePrevFrameCytoData={handlePrevFrameCytoData}
+      updateResetCytoData={handleResetCytoData}
       containerRef={currRef}
     />
   );
@@ -170,7 +146,7 @@ const BFS = (): JSX.Element => {
                 visited,
                 updateVisited,
                 cytoData,
-                updateCytoData,
+                handleResetCytoData,
               );
               setGraphStr(parseSource(source));
             }}

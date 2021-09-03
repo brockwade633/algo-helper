@@ -20,68 +20,73 @@ import { StepControlPanelProps } from './';
 
 const StepControlPanel = (props: StepControlPanelProps): JSX.Element => {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [frameEmitterSub, setFrameEmitterSub] = useState<Subscription>(new Subscription());
 
   const stepControl$ = new Subject();
-  //const algoFrameRate = interval(2000);
-  let algoFrameEmitter: Subscription;
 
-  const graphStr = props.graphStr;
-  const queue = props.queue;
+  const graphStr = props.graphStr; // we won't update the graph str in this component so don't make a copy
+  const queue = [...props.queue];
+  const visited = [...props.visited];
+  const cytoData = [...props.cytoData];
+
   const updateQueue = props.updateQueue;
-  const visited = props.visited;
   const updateVisited = props.updateVisited;
-  const cytoData = props.cytoData;
-  const updateCytoData = props.updateCytoData;
   const updateNextFrameCytoData = props.updateNextFrameCytoData;
   const updatePrevFrameCytoData = props.updatePrevFrameCytoData;
+  const updateResetCytoData = props.updateResetCytoData;
+
   const ref = props.containerRef;
 
   const prevIter = () => {
-    const newCyto = handlePrev(
+    handlePrev(
       graphStr,
       queue,
       updateQueue,
       visited,
       updateVisited,
       cytoData,
-      updateCytoData,
+      updatePrevFrameCytoData,
     );
-    stepControl$.next(newCyto);
+    stepControl$.next(cytoData);
   };
   const reset = () => {
+    frameEmitterSub.unsubscribe();
     setIsPlaying(false);
-    const newCyto = handleReset(
+    handleReset(
       graphStr,
       queue,
       updateQueue,
       visited,
       updateVisited,
       cytoData,
-      updateCytoData,
+      updateResetCytoData,
     );
-    stepControl$.next(newCyto);
+    stepControl$.next(cytoData);
   };
   const play = () => {
     setIsPlaying(true);
 
     if (queue.length) {
-      algoFrameEmitter = interval(1000)
-        .pipe(takeWhile(() => queue.length > 0))
+      const algoFrameEmitter = interval(1000)
+        .pipe(takeWhile(() => queue.length > 0));
+
+      setFrameEmitterSub(algoFrameEmitter
         .subscribe({
           next: (n) => {
             nextIter();
           },
           error: (e) => console.log(`Control Panel Observable Error: ${e}`),
           complete: () => setIsPlaying(false),
-        });
+        })
+      );
     } else {
       setIsPlaying(false);
+      frameEmitterSub.unsubscribe();
     }
   };
   const pause = () => {
     setIsPlaying(false);
-    console.log(algoFrameEmitter);
-    algoFrameEmitter.unsubscribe();
+    frameEmitterSub.unsubscribe();
   };
   const nextIter = () => {
     handleNext(
@@ -91,7 +96,6 @@ const StepControlPanel = (props: StepControlPanelProps): JSX.Element => {
       visited,
       updateVisited,
       cytoData,
-      updateCytoData,
       updateNextFrameCytoData,
     );
     stepControl$.next(cytoData);
