@@ -20,7 +20,9 @@ import { StepControlPanelProps } from './';
 
 const StepControlPanel = (props: StepControlPanelProps): JSX.Element => {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [frameEmitterSub, setFrameEmitterSub] = useState<Subscription>(new Subscription());
+  const [frameEmitterSub, setFrameEmitterSub] = useState<Subscription>(
+    new Subscription(),
+  );
 
   const stepControl$ = new Subject();
 
@@ -67,17 +69,18 @@ const StepControlPanel = (props: StepControlPanelProps): JSX.Element => {
     setIsPlaying(true);
 
     if (queue.length) {
-      const algoFrameEmitter = interval(1000)
-        .pipe(takeWhile(() => queue.length > 0));
+      const algoFrameEmitter = interval(1000).pipe(
+        takeWhile(() => queue.length > 0),
+      );
 
-      setFrameEmitterSub(algoFrameEmitter
-        .subscribe({
+      setFrameEmitterSub(
+        algoFrameEmitter.subscribe({
           next: (n) => {
             nextIter();
           },
           error: (e) => console.log(`Control Panel Observable Error: ${e}`),
           complete: () => setIsPlaying(false),
-        })
+        }),
       );
     } else {
       setIsPlaying(false);

@@ -71,7 +71,7 @@ const BFS = (): JSX.Element => {
   };
 
   const handleResetCytoData = (rootId: number) => {
-    setCytoData((prevData) => 
+    setCytoData((prevData) =>
       prevData.map((data) => {
         if (data.data.id === `n${rootId}`) {
           return { ...data, style: { 'background-color': '#d4e6f2' } };
