@@ -11,7 +11,8 @@ import {
   Rewind,
   Pause,
 } from 'grommet-icons';
-import { Subject } from 'rxjs';
+import { Subject, interval, Subscription, Observable } from 'rxjs';
+import { takeWhile, tap } from 'rxjs/operators';
 import { cytoWrapper } from '../..';
 import cytoscape from 'cytoscape';
 import { handlePrev, handleReset, handleNext } from '../../../bfs';
@@ -19,62 +20,88 @@ import { StepControlPanelProps } from './';
 
 const StepControlPanel = (props: StepControlPanelProps): JSX.Element => {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [frameEmitterSub, setFrameEmitterSub] = useState<Subscription>(
+    new Subscription(),
+  );
 
   const stepControl$ = new Subject();
 
-  const graphStr = props.graphStr;
-  const queue = props.queue;
+  const graphStr = props.graphStr; // we won't update the graph str in this component so don't make a copy
+  const queue = [...props.queue];
+  const visited = [...props.visited];
+  const cytoData = [...props.cytoData];
+
   const updateQueue = props.updateQueue;
-  const visited = props.visited;
   const updateVisited = props.updateVisited;
-  const cytoData = props.cytoData;
-  const updateCytoData = props.updateCytoData;
+  const updateNextFrameCytoData = props.updateNextFrameCytoData;
+  const updatePrevFrameCytoData = props.updatePrevFrameCytoData;
+  const updateResetCytoData = props.updateResetCytoData;
+
   const ref = props.containerRef;
 
-  const previous = () => {
-    const newCyto = handlePrev(
+  const prevIter = () => {
+    handlePrev(
       graphStr,
       queue,
       updateQueue,
       visited,
       updateVisited,
       cytoData,
-      updateCytoData,
+      updatePrevFrameCytoData,
     );
-    stepControl$.next(newCyto);
+    stepControl$.next(cytoData);
   };
   const reset = () => {
+    frameEmitterSub.unsubscribe();
     setIsPlaying(false);
-    const newCyto = handleReset(
+    handleReset(
       graphStr,
       queue,
       updateQueue,
       visited,
       updateVisited,
       cytoData,
-      updateCytoData,
+      updateResetCytoData,
     );
-    stepControl$.next(newCyto);
+    stepControl$.next(cytoData);
   };
   const play = () => {
     setIsPlaying(true);
-    stepControl$.next('play');
+
+    if (queue.length) {
+      const algoFrameEmitter = interval(1000).pipe(
+        takeWhile(() => queue.length > 0),
+      );
+
+      setFrameEmitterSub(
+        algoFrameEmitter.subscribe({
+          next: (n) => {
+            nextIter();
+          },
+          error: (e) => console.log(`Control Panel Observable Error: ${e}`),
+          complete: () => setIsPlaying(false),
+        }),
+      );
+    } else {
+      setIsPlaying(false);
+      frameEmitterSub.unsubscribe();
+    }
   };
   const pause = () => {
     setIsPlaying(false);
-    stepControl$.next('pause');
+    frameEmitterSub.unsubscribe();
   };
-  const next = () => {
-    const newCyto = handleNext(
+  const nextIter = () => {
+    handleNext(
       graphStr,
       queue,
       updateQueue,
       visited,
       updateVisited,
       cytoData,
-      updateCytoData,
+      updateNextFrameCytoData,
     );
-    stepControl$.next(newCyto);
+    stepControl$.next(cytoData);
   };
 
   useEffect(() => {
@@ -150,7 +177,7 @@ const StepControlPanel = (props: StepControlPanelProps): JSX.Element => {
         <Button
           icon={<Previous size="26px" color="black" />}
           hoverIndicator={true}
-          onClick={previous}
+          onClick={prevIter}
         />
         <Button
           icon={<Refresh size="26px" color="black" />}
@@ -167,12 +194,11 @@ const StepControlPanel = (props: StepControlPanelProps): JSX.Element => {
           }
           hoverIndicator={true}
           onClick={isPlaying ? pause : play}
-          disabled={true}
         />
         <Button
           icon={<Next size="26px" color="black" />}
           hoverIndicator={true}
-          onClick={next}
+          onClick={nextIter}
         />
       </Box>
     </Box>

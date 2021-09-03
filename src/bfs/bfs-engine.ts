@@ -8,8 +8,8 @@ export const handlePrev = (
   visited: number[],
   updateVisited: Function,
   cytoData: cytoscape.ElementDefinition[],
-  updateCytoData: Function,
-): cytoscape.ElementDefinition[] => {
+  updatePrevFrameCyto: Function,
+) => {
   let graph;
   try {
     graph = JSON.parse(graphStr);
@@ -19,7 +19,6 @@ export const handlePrev = (
 
   // get the node most recently visited
   const lastNodeId = visited.pop();
-  updateVisited(visited);
 
   // push the most recently visited node back onto the queue
   lastNodeId && queue.push(lastNodeId);
@@ -29,6 +28,7 @@ export const handlePrev = (
   const lastNode = graph.adjacencyList.filter(
     (node) => node.id === lastNodeId,
   )[0];
+
   while (
     lastNodeId &&
     lastNode.neighbors.includes(queue[0]) &&
@@ -37,15 +37,10 @@ export const handlePrev = (
   ) {
     queue.shift();
   }
+
   updateQueue(queue);
-
-  // revert cytodata styling to previous iteration
-  const newCytodata = cytoData.map((data) => {
-    return data.data.id === `n${lastNodeId}` ? { ...data, style: null } : data;
-  });
-  updateCytoData(newCytodata);
-
-  return newCytodata;
+  updateVisited(visited);
+  updatePrevFrameCyto(queue, visited);
 };
 
 export const handleReset = (
@@ -55,7 +50,7 @@ export const handleReset = (
   visited: number[],
   updateVisited: Function,
   cytoData: cytoscape.ElementDefinition[],
-  updateCytoData: Function,
+  updateResetCyto: Function,
 ) => {
   let graph;
   try {
@@ -66,19 +61,13 @@ export const handleReset = (
 
   // reset queue
   queue = [graph.rootId];
-  updateQueue(queue);
 
   // reset visited list
   visited = [];
+
+  updateQueue(queue);
   updateVisited(visited);
-
-  // reset cytodata styling
-  const newCytoData = cytoData.map((data) => {
-    return { ...data, style: null };
-  });
-  updateCytoData(newCytoData);
-
-  return newCytoData;
+  updateResetCyto(graph.rootId);
 };
 
 export const handleNext = (
@@ -88,8 +77,8 @@ export const handleNext = (
   visited: number[],
   updateVisited: Function,
   cytoData: cytoscape.ElementDefinition[],
-  updateCytoData: Function,
-): cytoscape.ElementDefinition[] => {
+  updateNextFrameCyto: Function,
+) => {
   let graph;
   try {
     graph = JSON.parse(graphStr);
@@ -113,21 +102,12 @@ export const handleNext = (
       queue.unshift(nodeId);
     }
   }
-  updateQueue(queue);
 
-  // add current node to visited list
   currNodeId && visited.push(currNodeId);
+
+  updateQueue(queue);
   updateVisited(visited);
-
-  // modify cytodata styling to represent visited node
-  const newCytodata = cytoData.map((data) => {
-    return data.data.id === `n${currNodeId}`
-      ? { ...data, style: { 'background-color': '#ffa500' } }
-      : data;
-  });
-  updateCytoData(newCytodata);
-
-  return newCytodata;
+  updateNextFrameCyto(currNodeId, queue);
 };
 
 const isNodeANeighborOfAVisitedNode = (

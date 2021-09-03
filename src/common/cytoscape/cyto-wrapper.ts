@@ -4,7 +4,6 @@ import cytoscape, { CytoscapeOptions, LayoutOptions } from 'cytoscape';
 export const cytoWrapper = (
   data: cytoscape.ElementDefinition[] | undefined,
   ref: RefObject<HTMLDivElement>,
-  //nextNode: number | undefined,
 ) => {
   try {
     const config: CytoscapeOptions = {
@@ -36,9 +35,6 @@ export const cytoWrapper = (
       headless: false,
     };
     const cy = cytoscape(config);
-    // if (nextNode) {
-    //   cy.nodes(`[id = "n${nextNode}"]`).style('background-color', 'blue');
-    // }
   } catch (error) {
     console.warn(error);
   }

@@ -12,7 +12,7 @@ import {
 import { ErrorObject } from 'ajv';
 import cytoscape from 'cytoscape';
 import { StepControlPanel } from '../common/graph-animation/step-control-panel';
-import { handleReset } from './bfs-engine';
+import { handlePrev, handleReset } from './bfs-engine';
 
 const BFS = (): JSX.Element => {
   const currRef = useRef<HTMLDivElement>(null);
@@ -56,8 +56,44 @@ const BFS = (): JSX.Element => {
     setVisited(newVisited);
   };
 
-  const updateCytoData = (newCytoData: cytoscape.ElementDefinition[]) => {
-    setCytoData(newCytoData);
+  const handlePrevFrameCytoData = (queue: number[], visited: number[]) => {
+    setCytoData((prevData) =>
+      prevData.map((data) => {
+        if (queue.includes(Number(data.data.id?.slice(1)))) {
+          return { ...data, style: { 'background-color': '#d4e6f2' } };
+        } else if (visited.includes(Number(data.data.id?.slice(1)))) {
+          return { ...data, style: { 'background-color': '#ffa500' } };
+        } else {
+          return { ...data, style: null };
+        }
+      }),
+    );
+  };
+
+  const handleResetCytoData = (rootId: number) => {
+    setCytoData((prevData) =>
+      prevData.map((data) => {
+        if (data.data.id === `n${rootId}`) {
+          return { ...data, style: { 'background-color': '#d4e6f2' } };
+        } else {
+          return { ...data, style: null };
+        }
+      }),
+    );
+  };
+
+  const handleNextFrameCytoData = (currNodeId: number, queue: number[]) => {
+    setCytoData((prevData) =>
+      prevData.map((data) => {
+        if (queue.includes(Number(data.data.id?.slice(1)))) {
+          return { ...data, style: { 'background-color': '#d4e6f2' } };
+        } else if (data.data.id === `n${currNodeId}`) {
+          return { ...data, style: { 'background-color': '#ffa500' } };
+        } else {
+          return data;
+        }
+      }),
+    );
   };
 
   const controlPanel = (
@@ -68,7 +104,9 @@ const BFS = (): JSX.Element => {
       visited={visited}
       updateVisited={updateVisited}
       cytoData={cytoData}
-      updateCytoData={updateCytoData}
+      updateNextFrameCytoData={handleNextFrameCytoData}
+      updatePrevFrameCytoData={handlePrevFrameCytoData}
+      updateResetCytoData={handleResetCytoData}
       containerRef={currRef}
     />
   );
@@ -108,7 +146,7 @@ const BFS = (): JSX.Element => {
                 visited,
                 updateVisited,
                 cytoData,
-                updateCytoData,
+                handleResetCytoData,
               );
               setGraphStr(parseSource(source));
             }}
