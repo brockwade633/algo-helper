@@ -29,15 +29,13 @@ export const handlePrev = (
     (node) => node.id === lastNodeId,
   )[0];
 
-  let firstQueueNode = queue[0];
   while (
     lastNodeId &&
-    lastNode.neighbors.includes(firstQueueNode) &&
-    lastNodeId !== firstQueueNode &&
-    !isNodeANeighborOfAVisitedNode(graph, visited, firstQueueNode)
+    lastNode.neighbors.includes(queue[0]) &&
+    lastNodeId !== queue[0] &&
+    !isNodeANeighborOfAVisitedNode(graph, visited, queue[0])
   ) {
     queue.shift();
-    firstQueueNode = queue[0];
   }
 
   updateQueue(queue);
