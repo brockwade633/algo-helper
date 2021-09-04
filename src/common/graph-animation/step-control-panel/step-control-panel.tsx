@@ -1,12 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Button, Text } from 'grommet';
-import {
-  PlayFill,
-  PauseFill,
-  Refresh,
-  Previous,
-  Next,
-} from 'grommet-icons';
+import { PlayFill, PauseFill, Refresh, Previous, Next } from 'grommet-icons';
 import { Subject, interval, Subscription } from 'rxjs';
 import { takeWhile } from 'rxjs/operators';
 import { cytoWrapper } from '../..';
@@ -35,26 +29,6 @@ const StepControlPanel = (props: StepControlPanelProps): JSX.Element => {
   const updateResetCytoData = props.updateResetCytoData;
 
   const ref = props.containerRef;
-
-  const handleKeyEvent = (e) => {
-    switch (e.code) {
-      case Keys.F9:
-        prevIter();
-        break;
-    
-      case Keys.F4:
-        reset();
-        break;
-
-      case Keys.F5:
-        isPlaying ? pause() : play();
-        break;
-
-      case Keys.F10:
-        nextIter();
-        break;
-    }
-  }
 
   const prevIter = () => {
     handlePrev(
@@ -123,6 +97,26 @@ const StepControlPanel = (props: StepControlPanelProps): JSX.Element => {
     }
   };
 
+  const handleKeyEvent = (e) => {
+    switch (e.code) {
+      case Keys.F9:
+        prevIter();
+        break;
+
+      case Keys.F4:
+        reset();
+        break;
+
+      case Keys.F5:
+        isPlaying ? pause() : play();
+        break;
+
+      case Keys.F10:
+        nextIter();
+        break;
+    }
+  };
+
   useEffect(() => {
     stepControl$.subscribe((data: cytoscape.ElementDefinition[]) => {
       ref && cytoWrapper(data, ref);
@@ -131,7 +125,7 @@ const StepControlPanel = (props: StepControlPanelProps): JSX.Element => {
     document.addEventListener('keyup', handleKeyEvent);
     return () => {
       document.removeEventListener('keyup', handleKeyEvent);
-    }
+    };
   });
 
   return (
