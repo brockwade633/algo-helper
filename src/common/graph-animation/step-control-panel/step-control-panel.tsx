@@ -1,18 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Button, Text } from 'grommet';
 import {
-  Play,
   PlayFill,
   PauseFill,
   Refresh,
   Previous,
   Next,
-  FastForward,
-  Rewind,
-  Pause,
 } from 'grommet-icons';
 import { Subject, interval, Subscription, Observable } from 'rxjs';
-import { takeWhile, tap } from 'rxjs/operators';
+import { takeWhile } from 'rxjs/operators';
 import { cytoWrapper } from '../..';
 import cytoscape from 'cytoscape';
 import { handlePrev, handleReset, handleNext } from '../../../bfs';
@@ -92,16 +88,18 @@ const StepControlPanel = (props: StepControlPanelProps): JSX.Element => {
     frameEmitterSub.unsubscribe();
   };
   const nextIter = () => {
-    handleNext(
-      graphStr,
-      queue,
-      updateQueue,
-      visited,
-      updateVisited,
-      cytoData,
-      updateNextFrameCytoData,
-    );
-    stepControl$.next(cytoData);
+    if (queue.length) {
+      handleNext(
+        graphStr,
+        queue,
+        updateQueue,
+        visited,
+        updateVisited,
+        cytoData,
+        updateNextFrameCytoData,
+      );
+      stepControl$.next(cytoData);
+    }
   };
 
   useEffect(() => {
@@ -175,16 +173,19 @@ const StepControlPanel = (props: StepControlPanelProps): JSX.Element => {
         direction="row"
       >
         <Button
+          className="control-panel"
           icon={<Previous size="26px" color="black" />}
-          hoverIndicator={true}
+          hoverIndicator={false}
           onClick={prevIter}
         />
         <Button
+          className="control-panel"
           icon={<Refresh size="26px" color="black" />}
-          hoverIndicator={true}
+          hoverIndicator={false}
           onClick={reset}
         />
         <Button
+          className="control-panel"
           icon={
             isPlaying ? (
               <PauseFill size="26px" color="black" />
@@ -192,12 +193,13 @@ const StepControlPanel = (props: StepControlPanelProps): JSX.Element => {
               <PlayFill size="26px" color="black" />
             )
           }
-          hoverIndicator={true}
+          hoverIndicator={false}
           onClick={isPlaying ? pause : play}
         />
         <Button
+          className="control-panel"
           icon={<Next size="26px" color="black" />}
-          hoverIndicator={true}
+          hoverIndicator={false}
           onClick={nextIter}
         />
       </Box>

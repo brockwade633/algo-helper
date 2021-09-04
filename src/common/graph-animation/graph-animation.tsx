@@ -23,7 +23,7 @@ const GraphAnimation = (props: GraphAnimationProps): JSX.Element => {
       </Box>
       <Box
         pad={{ left: 'small', right: 'small', top: 'small' }}
-        width="25%"
+        width={{ width: '25%', min: '225px' }}
         direction="column"
       >
         {props.stepControlPanel}

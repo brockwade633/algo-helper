@@ -12,32 +12,7 @@ code {
     monospace;
 }
 
-input:focus, textarea {
-  outline: none !important;
-}
-
-#graph-data {
-  width: 100%;
-}
-
-.good {
-  background-color: #ecefe9;
-  border: 2px solid green;
-}
-
-.error {
-  background-color: #ecefe9;
-  border: 2px solid red;
-}
-
-.validation-errors {
-  color: red;
-  border: 2px solid red;
-  background-color: #ecefe9;
-  font-weight: bold;
-  border-radius: 5px;
-}
-
-.error-message {
-  padding: 2px;
+.control-panel:active {
+  transform: scale(0.8);
+  /* Scaling the button to 80% its original size */
 }

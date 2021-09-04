@@ -65,12 +65,10 @@ export const BFSWrapper = styled.div`
     border-right: 5px solid rgba(0, 0, 0, 0.5);
   }
   .Pane1 {
-    // background-color: blue;
     display: flex;
     min-height: 0;
   }
   .Pane2 {
-    // background-color: red;
     display: flex;
     min-height: 0;
   }
