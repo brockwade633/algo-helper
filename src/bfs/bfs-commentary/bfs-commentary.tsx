@@ -38,7 +38,7 @@ const BFSCommentary = (): JSX.Element => {
   \`\`\`bash
   from collections import deque
 
-  bfs_traversal(source_node):
+  def bfs_traversal(source_node):
     queue = deque([source_node])
     visited = []
     while queue:

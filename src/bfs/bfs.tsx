@@ -39,6 +39,8 @@ const BFS = (): JSX.Element => {
       } else {
         setCytoData(cytoBFSTransform(sourceJson));
         setErrors([]);
+        setQueue([sourceJson.rootId]);
+        setVisited([]);
       }
       const prettyText = JSON.stringify(sourceJson, undefined, 2);
       return prettyText;
@@ -116,7 +118,10 @@ const BFS = (): JSX.Element => {
       <SplitPane
         className="bfs-worksheet"
         split="vertical"
-        defaultSize="65%"
+        defaultSize="35%"
+        primary="second"
+        minSize={400}
+        maxSize={1200}
         onChange={() => {
           cytoWrapper(cytoData, currRef);
         }}
@@ -124,6 +129,9 @@ const BFS = (): JSX.Element => {
         <SplitPane
           split="horizontal"
           defaultSize="60%"
+          primary="first"
+          minSize={400}
+          maxSize={650}
           onChange={() => {
             cytoWrapper(cytoData, currRef);
           }}

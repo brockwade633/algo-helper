@@ -26,11 +26,7 @@ export const cytoWrapper = (
         name: 'breadthfirst',
         fit: true,
         padding: 50,
-        //boundingBox: undefined,
         animate: false,
-        //animationDuration: 300,
-        //animationEasing: undefined,
-        //transform: function (node: any, pos: any){ return pos; }
       },
       headless: false,
     };
