@@ -1,3 +1,4 @@
+export * from './custom-theme';
 export * from './cytoscape';
 export * from './graph-animation';
 export * from './graph-info';

@@ -10,7 +10,7 @@ export const cytoBFSTransform = (json: Graph) => {
       node.id === json.rootId
         ? {
             data: { id: `n${node.id}`, value: node.value },
-            style: { 'background-color': '#d4e6f2' },
+            style: { 'background-color': '#4492c6' },
           }
         : { data: { id: `n${node.id}`, value: node.value } };
     cytoData.push(data);
