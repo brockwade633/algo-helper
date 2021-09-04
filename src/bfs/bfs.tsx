@@ -12,7 +12,7 @@ import {
 import { ErrorObject } from 'ajv';
 import cytoscape from 'cytoscape';
 import { StepControlPanel } from '../common/graph-animation/step-control-panel';
-import { handlePrev, handleReset } from './bfs-engine';
+import { handleReset } from './bfs-engine';
 
 const BFS = (): JSX.Element => {
   const currRef = useRef<HTMLDivElement>(null);
@@ -60,7 +60,7 @@ const BFS = (): JSX.Element => {
     setCytoData((prevData) =>
       prevData.map((data) => {
         if (queue.includes(Number(data.data.id?.slice(1)))) {
-          return { ...data, style: { 'background-color': '#d4e6f2' } };
+          return { ...data, style: { 'background-color': '#4492c6' } };
         } else if (visited.includes(Number(data.data.id?.slice(1)))) {
           return { ...data, style: { 'background-color': '#ffa500' } };
         } else {
@@ -74,7 +74,7 @@ const BFS = (): JSX.Element => {
     setCytoData((prevData) =>
       prevData.map((data) => {
         if (data.data.id === `n${rootId}`) {
-          return { ...data, style: { 'background-color': '#d4e6f2' } };
+          return { ...data, style: { 'background-color': '#4492c6' } };
         } else {
           return { ...data, style: null };
         }
@@ -86,7 +86,7 @@ const BFS = (): JSX.Element => {
     setCytoData((prevData) =>
       prevData.map((data) => {
         if (queue.includes(Number(data.data.id?.slice(1)))) {
-          return { ...data, style: { 'background-color': '#d4e6f2' } };
+          return { ...data, style: { 'background-color': '#4492c6' } };
         } else if (data.data.id === `n${currNodeId}`) {
           return { ...data, style: { 'background-color': '#ffa500' } };
         } else {

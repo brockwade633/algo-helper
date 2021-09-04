@@ -14,7 +14,7 @@ export const BFSWrapper = styled.div`
   }
 
   .graph-visualization {
-    background-color: white;
+    background-color: rgb(30, 30, 30);
   }
 
   .algo-panel {

@@ -1,6 +1,29 @@
 import React from 'react';
-import ReactMarkdown from 'react-markdown';
 import { Box, Text } from 'grommet';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import ReactMarkdown from 'react-markdown';
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { foundation } from 'react-syntax-highlighter/dist/esm/styles/hljs/';
+
+const renderers = {
+  // eslint-disable-next-line react/prop-types
+  code: ({ language, value }) => {
+    const { showLineNumbers, codeStyle } =
+      language === 'bash'
+        ? { showLineNumbers: false, codeStyle: foundation }
+        : { showLineNumbers: true, codeStyle: vscDarkPlus };
+
+    return (
+      <SyntaxHighlighter
+        style={codeStyle}
+        language={language}
+        showLineNumbers={showLineNumbers}
+        // eslint-disable-next-line react/no-children-prop
+        children={value}
+      />
+    );
+  },
+};
 
 const BFSCommentary = (): JSX.Element => {
   const CONTENT = `---
@@ -10,8 +33,23 @@ const BFSCommentary = (): JSX.Element => {
   Once all the neighboring nodes of the current node have been explored, the node is said to be **visited**, and marked as such
   via membership in a **visited** list. Then, the next node in the **queue** is popped off and the next iteration begins. 
   In the animation to the left, the **visited** nodes are colored **orange**, while **un-visited** nodes that have been stored in the **queue** 
-  for future iterations are colored **blue**. 
+  for future iterations are colored **blue**.\n
+  **Python implementation:**\n
+  \`\`\`bash
+  from collections import deque
+
+  bfs_traversal(source_node):
+    queue = deque([source_node])
+    visited = []
+    while queue:
+      node = queue.pop()
+      for neighbor in node.neighbors:
+        if neighbor not in visited:
+          queue.appendleft(neighbor)
+      visited.append(node)
+  \`\`\` 
   `;
+
   return (
     <Box pad="medium" width="100%">
       <Box
@@ -24,7 +62,7 @@ const BFSCommentary = (): JSX.Element => {
         <Text size="xxlarge" weight="bold" alignSelf="center">
           Breadth First Search
         </Text>
-        <ReactMarkdown children={CONTENT} />
+        <ReactMarkdown renderers={renderers}>{CONTENT}</ReactMarkdown>
       </Box>
     </Box>
   );

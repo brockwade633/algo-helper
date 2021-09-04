@@ -2,12 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import { Grommet } from 'grommet';
+import { customTheme } from './common';
 import BFS from './bfs/bfs';
 // import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
-    <Grommet plain>
+    <Grommet theme={customTheme}>
       <BFS />
     </Grommet>
   </React.StrictMode>,
