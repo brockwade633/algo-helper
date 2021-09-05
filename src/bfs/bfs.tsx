@@ -8,6 +8,7 @@ import {
   validateGraph,
   useCytoscape,
   cytoWrapper,
+  AbstractList
 } from '../common';
 import { ErrorObject } from 'ajv';
 import cytoscape from 'cytoscape';
@@ -149,9 +150,9 @@ const BFS = (): JSX.Element => {
             handleSourceChange={(source: string) => {
               handleReset(
                 graphStr,
-                queue,
+                new AbstractList(queue),
                 updateQueue,
-                visited,
+                new AbstractList(visited),
                 updateVisited,
                 cytoData,
                 handleResetCytoData,

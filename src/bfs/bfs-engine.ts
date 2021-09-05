@@ -1,11 +1,11 @@
-import { Graph } from '../common/models';
+import { Graph, AbstractList } from '../common';
 import cytoscape from 'cytoscape';
 
 export const handlePrev = (
   graphStr: string,
-  queue: number[],
+  queue: AbstractList,
   updateQueue: Function,
-  visited: number[],
+  visited: AbstractList,
   updateVisited: Function,
   cytoData: cytoscape.ElementDefinition[],
   updatePrevFrameCyto: Function,
@@ -18,36 +18,36 @@ export const handlePrev = (
   }
 
   // get the node most recently visited
-  const lastNodeId = visited.pop();
+  const lastNodeId = visited.popOffBack();
 
   // push the most recently visited node back onto the queue
-  lastNodeId && queue.push(lastNodeId);
+  lastNodeId && queue.appendToBack(lastNodeId);
 
-  // remove the relevant nodes from the queue
-  // (neighbors that haven't been reached yet, and that aren't a neighbor of any previously visited nodes)
   const lastNode = graph.adjacencyList.filter(
     (node) => node.id === lastNodeId,
   )[0];
 
+  // remove the relevant nodes from the queue
+  // (neighbors that haven't been reached yet, and that aren't a neighbor of any previously visited nodes)
   while (
     lastNodeId &&
-    lastNode.neighbors.includes(queue[0]) &&
-    lastNodeId !== queue[0] &&
-    !isNodeANeighborOfAVisitedNode(graph, visited, queue[0])
+    lastNode.neighbors.includes(queue.peekFront()) &&
+    lastNodeId !== queue.peekFront() &&
+    !isNodeANeighborOfAVisitedNode(graph, visited.dump(), queue.peekFront())
   ) {
-    queue.shift();
+    queue.popOffFront();
   }
 
-  updateQueue(queue);
-  updateVisited(visited);
-  updatePrevFrameCyto(queue, visited);
+  updateQueue(queue.dump());
+  updateVisited(visited.dump());
+  updatePrevFrameCyto(queue.dump(), visited.dump());
 };
 
 export const handleReset = (
   graphStr: string,
-  queue: number[],
+  queue: AbstractList,
   updateQueue: Function,
-  visited: number[],
+  visited: AbstractList,
   updateVisited: Function,
   cytoData: cytoscape.ElementDefinition[],
   updateResetCyto: Function,
@@ -60,21 +60,22 @@ export const handleReset = (
   }
 
   // reset queue
-  queue = [graph.rootId];
+  queue.flush();
+  queue.appendToFront(graph.rootId);
 
   // reset visited list
-  visited = [];
+  visited.flush();
 
-  updateQueue(queue);
-  updateVisited(visited);
+  updateQueue(queue.dump());
+  updateVisited(visited.dump());
   updateResetCyto(graph.rootId);
 };
 
 export const handleNext = (
   graphStr: string,
-  queue: number[],
+  queue: AbstractList,
   updateQueue: Function,
-  visited: number[],
+  visited: AbstractList,
   updateVisited: Function,
   cytoData: cytoscape.ElementDefinition[],
   updateNextFrameCyto: Function,
@@ -91,23 +92,23 @@ export const handleNext = (
   }
 
   // pop off next node
-  const currNodeId = queue.pop();
+  const currNodeId = queue.popOffBack();
 
   // find neighbors and add to queue
   const currNode = graph.adjacencyList.filter(
     (node) => node.id === currNodeId,
   )[0];
   for (const nodeId of currNode.neighbors) {
-    if (!visited.includes(nodeId) && !queue.includes(nodeId)) {
-      queue.unshift(nodeId);
+    if (!visited.dump().includes(nodeId) && !queue.dump().includes(nodeId)) {
+      queue.appendToFront(nodeId);
     }
   }
 
-  currNodeId && visited.push(currNodeId);
+  currNodeId && visited.appendToBack(currNodeId);
 
-  updateQueue(queue);
-  updateVisited(visited);
-  updateNextFrameCyto(currNodeId, queue);
+  updateQueue(queue.dump());
+  updateVisited(visited.dump());
+  updateNextFrameCyto(currNodeId, queue.dump());
 };
 
 const isNodeANeighborOfAVisitedNode = (

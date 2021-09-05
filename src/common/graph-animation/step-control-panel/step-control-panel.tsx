@@ -7,7 +7,7 @@ import { cytoWrapper } from '../..';
 import cytoscape from 'cytoscape';
 import { handlePrev, handleReset, handleNext } from '../../../bfs';
 import { StepControlPanelProps } from './';
-import { Keys } from '../../models';
+import { Keys, AbstractList } from '../../';
 
 const StepControlPanel = (props: StepControlPanelProps): JSX.Element => {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -18,8 +18,8 @@ const StepControlPanel = (props: StepControlPanelProps): JSX.Element => {
   const stepControl$ = new Subject();
 
   const graphStr = props.graphStr; // we won't update the graph str in this component so don't make a copy
-  const queue = [...props.queue];
-  const visited = [...props.visited];
+  const queue = new AbstractList([...props.queue]);
+  const visited = new AbstractList([...props.visited]);
   const cytoData = [...props.cytoData];
 
   const updateQueue = props.updateQueue;
