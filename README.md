@@ -1,46 +1,51 @@
-# Getting Started with Create React App
+![AlgoHelper Image](./AHLogo.jpeg)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Algo Helper is a project that provides visualizations and animations of common algorithms. Born out of the scarcity of algorithm visualization tools, it functions as an interactive web app with custom data inputs, a debugger, and brief written explanations.
 
-## Available Scripts
+My hope is that this can be a learning tool for conceptualizing computer science algorithms. The project is in early stages and currently supports *Breadth First Search*! More algos to follow...
 
-In the project directory, you can run:
+# Prerequisites
+* Git
+* [Docker](https://www.docker.com/products/docker-desktop)
+* Web Browser
 
-### `npm start`
+# Usage
+## Startup 
+First, clone the repo.
+```bash
+git clone https://github.com/brockwade633/algo-helper.git
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Inside the ```algo-helper``` folder, build and run the image.
+```bash
+cd algo-helper
+```
+build and tag image in the current directory.
+```bash
+docker build -t algo-helper:latest .
+```
+run the container in interactive mode with the appropriate port binding, removing once stopped.
+```bash
+docker run -it -p 1234:80 --rm algo-helper:latest
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+```
+Access the web app at [http://localhost:1234](http://localhost:1234)
 
-### `npm test`
+## App Walkthrough 
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+![Algo Helper Screenshot](./AHScreenshot.png)
 
-### `npm run build`
+### Split Panes
+The different areas of the user interface are divided into adjustable panes - click and drag the edge of a pane horizontally or vertically to enlarge a specific area when engaging with it.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Debugger
+The debugger is located near the top of the interface and contains back, reset, play, pause, and forward controls, triggered by button clicks as well as the labeled key presses. Use the debugger to step forwards and backwards through the algorithm, play it continuously, or reset from the beginning. The progress of the algorithm can be tracked with the visual of the graph, as well as the panes showing the data structures leveraged by the algorithm and their current state.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Graph Source & Definition
+The graph source on the bottom left represents the input graph to be acted upon by the algorithm. It is a json representation that must conform to the simple adjacency list definition shown to its right. A simple graph is automatically loaded as a default, but any input graph may be typed or pasted into the source window. As long as it validates successfully against the definition, the new graph will be used for any subsequent algorithm iterations.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Commentary
+The rightmost pane contains a brief commentary describing the algorithm, and an example implementation in code.
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+# Contribute
+Have an algorithm you'd like to add to the mix? Contributions are welcome! More instructions will be provided shortly.
