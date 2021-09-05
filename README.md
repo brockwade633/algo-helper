@@ -33,7 +33,7 @@ Access the web app at [http://localhost:1234](http://localhost:1234)
 
 ## App Walkthrough 
 
-![Algo Helper Screenshot](./AHScreenshot.png)
+![Algo Helper Screenshot](./AHScreenShot.png)
 
 ### Split Panes
 The different areas of the user interface are divided into adjustable panes - click and drag the edge of a pane horizontally or vertically to enlarge a specific area when engaging with it.
