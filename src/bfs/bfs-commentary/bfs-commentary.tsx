@@ -27,14 +27,14 @@ const renderers = {
 
 const BFSCommentary = (): JSX.Element => {
   const CONTENT = `---
-  **Breadth First Search**, or **BFS**, is a common graph traversal and/or searching algorithm.\n
+  **Breadth First Search**, or **BFS**, is a common graph traversal and/or searching algorithm.
   Starting from a single node, **BFS** traverses the graph by repeatedly exploring each neighbor of the current node.
-  Once a neighbor is explored, it is placed onto a **queue** so that in a future iteration, *its* neighbors may be searched.\n
+  Once a neighbor is explored, it is placed onto a **queue** so that in a future iteration, *its* neighbors may be searched.  
   Once all the neighboring nodes of the current node have been explored, the node is said to be **visited**, and marked as such
   via membership in a **visited** list. Then, the next node in the **queue** is popped off and the next iteration begins. 
   In the animation to the left, the **visited** nodes are colored **orange**, while **un-visited** nodes that have been stored in the **queue** 
   for future iterations are colored **blue**.\n
-  **Python implementation:**\n
+  **Python implementation:**
   \`\`\`bash
   from collections import deque
 
@@ -44,7 +44,10 @@ const BFSCommentary = (): JSX.Element => {
     while queue:
       node = queue.pop()
       for neighbor in node.neighbors:
-        if neighbor not in visited:
+        if (
+            neighbor not in visited
+            and neighbor not in queue
+        ):
           queue.appendleft(neighbor)
       visited.append(node)
   \`\`\` 
